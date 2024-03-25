@@ -1,8 +1,25 @@
 cmake_minimum_required (VERSION 3.27 FATAL_ERROR)
 
 set(PROJECT_NAME VKR)
-set(SOURCES_FILES src/main.cpp)
-
+set(SOURCES_FILES src/main.cpp 
+    src/proceduralgeneration/ProceduralGeneration.h
+	src/proceduralgeneration/ProceduralGeneration.cpp
+	src/Shaders.frag
+	src/player/player.h
+	src/player/player.cpp
+	src/AnimationManager/AnimationManager.h
+	src/AnimationManager/AnimationManager.cpp
+	src/Camera/Camera.h
+	src/Camera/Camera.cpp
+	src/character/character.h
+	src/character/character.cpp
+	src/enemy/enemy.h
+	src/enemy/enemy.cpp
+	src/game/game.h
+	src/game/game.cpp
+	src/Map/map.h
+	src/Map/map.cpp)
+	
 project(${PROJECT_NAME})
 
 
@@ -11,7 +28,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
 else ()
 	add_executable(${PROJECT_NAME} ${SOURCES_FILES})
 endif ()
-set(SFML_DIR "C:/hz/учеба/Диплом/game/SFML-2.6.0/lib/cmake/SFML")
+set(SFML_DIR "external/SFML-2.6.0/lib/cmake/SFML")
 set(SFML_STATIC_LIBRARIES TRUE)
 find_package(SFML 2.6 COMPONENTS graphics audio REQUIRED)
 if(SFML_FOUND)
