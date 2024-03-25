@@ -1,0 +1,8 @@
+
+namespace ar
+{
+   class AnimationManager
+   {
+
+   };
+}

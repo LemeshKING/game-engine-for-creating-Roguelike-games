@@ -1,6 +1,6 @@
 #include "map.h"
 
-void Map::smoothMap(std::vector<int>& tmp)
+void mp::Map::smoothMap(std::vector<int>& tmp)
 {
 	for (auto& i : tmp)
 	{
@@ -21,7 +21,7 @@ void Map::smoothMap(std::vector<int>& tmp)
 			tmp[i - 1] = tmp[i];
 }
 
-void Map::GenerateMap()
+void mp::Map::GenerateMap()
 {
 	srand(time(NULL));
 	seed = 1 + std::rand() % 10000;
@@ -38,32 +38,32 @@ void Map::GenerateMap()
 		TileMap[Height - 1 - tmp[j]][j] = 1;
 }
 
-unsigned int Map::getHeight()
+unsigned int mp::Map::getHeight()
 {
 	return Height;
 }
 
-unsigned int Map::getWidth()
+unsigned int mp::Map::getWidth()
 {
 	return Width;
 }
 
-void Map::setHeight(unsigned int _Height)
+void mp::Map::setHeight(unsigned int _Height)
 {
 	Height = _Height;
 }
 
-void Map::setWidth(unsigned int _Width)
+void mp::Map::setWidth(unsigned int _Width)
 {
 	Width = _Width;
 }
 
-void Map::setPersistence(float _Persistence)
+void mp::Map::setPersistence(float _Persistence)
 {
 	persistence = _Persistence;
 }
 
-void Map::setCountNoiseFunction(int _Count)
+void mp::Map::setCountNoiseFunction(int _Count)
 {
 	countNoiseFunction = _Count;
 }

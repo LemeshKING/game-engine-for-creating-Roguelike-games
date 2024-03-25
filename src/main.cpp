@@ -2,6 +2,9 @@
 #include <iostream>
 #include <random>
 #include "proceduralgeneration/ProceduralGeneration.h"
+#include "enemy/enemy.h"
+#include "player/player.h"
+
 
 const int Height = 70;
 const int Width = 1000;
@@ -12,6 +15,8 @@ std::vector<std::vector<int>> Tilemap(Height,std::vector<int>(Width));
 
 int main()
 {
+	Player pl;
+	Enemy en;
 	sf::View view;
 	view.reset(sf::FloatRect(0, 0,1920,1080));
 	int w = 1920;
@@ -29,7 +34,7 @@ int main()
 	//int framesStill = 1;
 	sf::RectangleShape rectangle(sf::Vector2f(32,32));
 	
-	sf::RenderWindow window(sf::VideoMode(w, h), "Ray tracing", sf::Style::Titlebar | sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode(w, h), "Ray tracing", sf::Style::Fullscreen);
 	window.setFramerateLimit(60);
 	//window.setMouseCursorVisible(false);
 
@@ -169,6 +174,8 @@ int main()
 			view.setCenter(mouseX, mouseY);
 
 		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			window.close();
 		for(int i = 0; i < Height; i++)
 			for(int j = mouseX / 32 - 32; j < mouseX / 32 + 32; j++)
 			{

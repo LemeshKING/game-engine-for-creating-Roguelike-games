@@ -18,7 +18,9 @@ set(SOURCES_FILES src/main.cpp
 	src/game/game.h
 	src/game/game.cpp
 	src/Map/map.h
-	src/Map/map.cpp)
+	src/Map/map.cpp
+	src/Health/health.h
+	src/Health/health.cpp)
 	
 project(${PROJECT_NAME})
 
