@@ -19,6 +19,7 @@ namespace mp{
       void setWidth(unsigned int _Width);
       void setPersistence(float _Persistence);
       void setCountNoiseFunction(int _Count);
+      void setSeed(unsigned int _seed);
    private: 
       void smoothMap(std::vector<int>& tmp);
    

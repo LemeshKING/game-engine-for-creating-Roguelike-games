@@ -67,3 +67,8 @@ void mp::Map::setCountNoiseFunction(int _Count)
 {
 	countNoiseFunction = _Count;
 }
+
+void mp::Map::setSeed(unsigned int _seed)
+{
+	seed = _seed;
+}
