@@ -16,7 +16,8 @@ void Game::Run(sf::RenderWindow &window)
 	int mouseY = h / 2;
 	srand(time(NULL));
 	int seed = 1 + std::rand() % 1000;
-
+	Enemy enemy;
+	enemy.Initialization(32, 0);
 	sf::RectangleShape rectangle(sf::Vector2f(32, 32));
 
 
@@ -33,57 +34,32 @@ void Game::Run(sf::RenderWindow &window)
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
-			{
 				window.close();
-			}
 		}
-
 		
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			pl.dx = 5;
-			if(pl.camera.getCenterX() >= (location.getWidth() - 32) * 32)
-				pl.camera.setCenterX((location.getWidth() - 32) * 32);
+			pl.setDx(1);
+			pl.setDirection(1);
+			if(pl.getCamera().getCenterX() >= (location.getWidth() - 15) * 32)
+				pl.getCamera().setCenterX((location.getWidth() - 15) * 32);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
-			pl.dx = -1;
+			pl.setDx(1);
+			pl.setDirection(-1);
 
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			if (pl.onGround)
-				pl.dy = -0.75;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			if (pl.camera.getCenterX() < (location.getWidth() - 32) * 32)
-				pl.camera.setCenterX(pl.camera.getCenterX() + 64);
-			pl.camera.setCenter();
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			if (pl.camera.getCenterX() > 32 * 32)
-				pl.camera.setCenterX(pl.camera.getCenterX() - 64);
-			pl.camera.setCenter();
-
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-			mouseY -= 64;
-			view.setCenter(mouseX, mouseY);
-
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			mouseY += 64;
-			view.setCenter(mouseX, mouseY);
-
+			if (pl.isOnGround())
+				pl.setDy(-0.75);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 			window.close();
+		
 		for (int i = 0; i < location.getHeight(); i++)
-			for (int j = pl.camera.getCenterX() / 32 - 30; j < pl.camera.getCenterX() / 32 + 32; j++)
+			for (int j = pl.getCamera().getCenterX() / 32 - 15; j < pl.getCamera().getCenterX() / 32 + 17; j++)
 			{
 				if (location.TileMap[i][j] == 1)
 					rectangle.setFillColor(sf::Color::Black);
@@ -93,9 +69,19 @@ void Game::Run(sf::RenderWindow &window)
 				window.draw(rectangle);
 			}
 		pl.update(5,location.TileMap);
-		window.draw(pl.rectangle);
+		for (int i = 0; i < Enemys.size(); i++)
+		{
+			if(Enemys[i].getRect().left > pl.getCamera().getCenterX() - 512 && Enemys[i].getRect().left < pl.getCamera().getCenterX() + 576)
+			{
+				if(pl.getRect().intersects(Enemys[i].getRect()))
+					std::cout << "Take Damage" << std::endl;
+				Enemys[i].update(5,location.TileMap);
+				window.draw(Enemys[i].getRectangle());
+			}
+		}
+		window.draw(pl.getRectangle());
 		window.display();
-		window.setView(pl.camera.getView());
+		window.setView(pl.getCamera().getView());
 		window.clear(sf::Color::White);
 	}
 }
@@ -111,21 +97,36 @@ void Game::Menu()
 void Game::Initialization()
 {
    location.setHeight(70);
-   location.setWidth(100);
-   location.setPersistence(5);
-   location.setCountNoiseFunction(8);
+   location.setWidth(250);
+   location.setPersistence(3);
+   location.setCountNoiseFunction(4);
    location.GenerateMap();
-	pl.Initialization(10 * 32,0);
+	pl.setCharacterHeight(50);
+	pl.setCharacterWidth(40);
+	pl.Initialization(0,location.getStartPlayerPosition() * 32);
 	sf::RenderWindow window(sf::VideoMode(w, h), "Ray tracing", sf::Style::Fullscreen);
 	Camera camera;
 	sf::View view;
-	view.reset(sf::FloatRect(w/2,h/2,w,h));
+	
 	camera.setView(view);
-	camera.setCenterX(w/2 + 64);
-	camera.setCenterY(h/2);
+
 	camera.setWindowHeight(h);
 	camera.setWindowWidth(w);
-	pl.camera = camera;
+	camera.setViewMode(sf::Vector2u(w/2,h/2));
+	camera.setCenterX(w / 4);
+	camera.setCenterY(h / 4);
+	Enemys.resize(30 + rand() % 50);
+	for(int i = 0; i < Enemys.size(); i++)
+	{
+		int tmp = 30 + rand() % (location.getWidth() - 50 + 1);
+		Enemys[i].setCharacterHeight(50);
+		Enemys[i].setCharacterWidth(40);
+		Enemys[i].Initialization(tmp * 32,(location.getHeight() - location.MapHeightValues[tmp] - 3) * 32);
+	}
+
+		
+	
+	pl.setCamera(camera);
 	Run(window);
 
 }

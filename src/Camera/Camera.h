@@ -4,6 +4,7 @@ class Camera
 {
    int windowHeight;
    int windowWidth;
+   sf::Vector2u viewMode;
    sf::View camera;
    int centerX = 0, centerY = 0;
  public:
@@ -16,4 +17,6 @@ class Camera
    void setWindowWidth(int _windowWidth);
    sf::View getView();
    void setView(sf::View _view);
+   void setViewMode(sf::Vector2u _viewMode);
+   sf::Vector2u getViewMode();
 };

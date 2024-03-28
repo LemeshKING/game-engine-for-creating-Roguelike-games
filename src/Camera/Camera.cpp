@@ -2,10 +2,10 @@
 
 void Camera::setCenterX(int _centerX)
 {
-   if(_centerX > windowWidth / 2)
+   if(_centerX > viewMode.x / 2)
       centerX = _centerX;
    else
-      centerX = windowWidth / 2;
+      centerX = viewMode.x / 2;
 }
 
 void Camera::setCenterY(int _centerY)
@@ -46,4 +46,15 @@ sf::View Camera::getView()
 void Camera::setView(sf::View _view)
 {
    camera = _view;
+}
+
+void Camera::setViewMode(sf::Vector2u _viewMode)
+{
+   viewMode = _viewMode;
+   camera.reset(sf::FloatRect(windowWidth,windowHeight, _viewMode.x,_viewMode.y));
+}
+
+sf::Vector2u Camera::getViewMode()
+{
+   return viewMode;
 }

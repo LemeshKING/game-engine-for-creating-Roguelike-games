@@ -9,9 +9,10 @@ namespace mp{
       unsigned int Height = 0, Width = 0;
       float persistence = 0;
       int countNoiseFunction = 0;
+      int startPlayerPosition;
    public:
       std::vector<std::vector<int>> TileMap;
-
+      std::vector<int> MapHeightValues;
       void GenerateMap();
       unsigned int getHeight();
       unsigned int getWidth();
@@ -20,8 +21,9 @@ namespace mp{
       void setPersistence(float _Persistence);
       void setCountNoiseFunction(int _Count);
       void setSeed(unsigned int _seed);
+      int getStartPlayerPosition();
    private: 
-      void smoothMap(std::vector<int>& tmp);
+      void smoothMap();
    
    };
 }

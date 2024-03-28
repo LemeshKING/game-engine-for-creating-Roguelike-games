@@ -2,7 +2,7 @@ namespace hlth
 {
    class Health
    {
-      unsigned int Health;
+      unsigned int healthPoints;
     private:
       void Kill();
     public:

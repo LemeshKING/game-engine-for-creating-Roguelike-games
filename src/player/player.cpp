@@ -6,7 +6,7 @@ Player::Player()
 
 void Player::Initialization(int x, int y)
 {
-   rect = sf::FloatRect(x, y, 40, 50);
+   rect = sf::FloatRect(x, y, characterWidth, characterHeight);
    rectangle.setSize(sf::Vector2f(rect.width, rect.height));
    rectangle.setFillColor(sf::Color::Green);
    rectangle.setPosition(rect.left,rect.top);
@@ -16,6 +16,7 @@ void Player::Initialization(int x, int y)
 
 void Player::update(const float& time, const std::vector<std::vector<int>>& location)
 {
+   dx *= direction;
    rect.left += dx * time;
    CollisionX(location);
    if (!onGround) dy = dy + 0.005 * time;
@@ -23,15 +24,25 @@ void Player::update(const float& time, const std::vector<std::vector<int>>& loca
    onGround = false;
    CollisionY(location);
    rectangle.setPosition(rect.left, rect.top);
-   if(camera.getCenterX() > (location[0].size() - 32) * 32)
-      camera.setCenterX((location[0].size() - 32) * 32);
-   else if (rect.left < (location[0].size() - 32) * 32 && dx < 0)
+   if(camera.getCenterX() > (location[0].size() - 17) * 32)
+      camera.setCenterX((location[0].size() - 17) * 32);
+   else if (rect.left < (location[0].size() - 17) * 32 && dx < 0)
       camera.setCenterX(rect.left);
-   else if(camera.getCenterX() < (location[0].size() - 32) * 32)
+   else if(camera.getCenterX() < (location[0].size() - 17) * 32)
       camera.setCenterX(rect.left);
    camera.setCenterY(rect.top);
    camera.setCenter();
    dx = 0;
+}
+
+void Player::setCamera(Camera _camera)
+{
+   camera = _camera;
+}
+
+Camera Player::getCamera()
+{
+   return camera;
 }
 
 
