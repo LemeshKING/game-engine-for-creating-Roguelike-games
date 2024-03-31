@@ -61,6 +61,22 @@ sf::FloatRect Character::getRect()
    return rect;
 }
 
+void Character::setHealth(hlth::Health _Health)
+{
+   health = _Health;
+}
+
+void Character::TakeDamage(int damageValue)
+{
+   health.TakeDamage(damageValue);
+}
+
+bool Character::isAlive()
+{
+   return alive;
+}
+
+
 void Character::CollisionX(const std::vector<std::vector<int>>& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
@@ -89,4 +105,9 @@ void Character::CollisionY(const std::vector<std::vector<int>>& location)
                rect.top = i * 32 + 32;
                dy = 0;
             }
+}
+
+void Character::Kill()
+{
+   alive = false;
 }

@@ -214,13 +214,6 @@ int main()
 	Game game;
 	game.Initialization();
 	mp::Map location;
-	location.setHeight(Height);
-	location.setWidth(Width);
-	location.setPersistence(5);
-	location.setCountNoiseFunction(10);
-	location.GenerateMap();
-	Player pl;
-	pl.Initialization(320, 0);
 	
 	Enemy en;
 

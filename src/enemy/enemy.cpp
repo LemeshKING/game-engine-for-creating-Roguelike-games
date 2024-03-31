@@ -26,6 +26,14 @@ void Enemy::update(const float& time, const std::vector<std::vector<int>>& locat
    CollisionY(location);
    rectangle.setPosition(rect.left, rect.top);
 }
+void Enemy::setDamageValue(int _damage)
+{
+   damageValue = _damage;
+}
+int Enemy::getDamageValue()
+{
+   return damageValue;
+}
 void Enemy::CollisionX(const std::vector<std::vector<int>>& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)

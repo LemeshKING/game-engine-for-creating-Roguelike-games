@@ -20,7 +20,13 @@ set(SOURCES_FILES src/main.cpp
 	src/Map/map.h
 	src/Map/map.cpp
 	src/Health/health.h
-	src/Health/health.cpp)
+	src/Health/health.cpp
+	src/Weapon/weapon.h
+	src/Weapon/weapon.cpp
+	src/bow/bow.h
+	src/bow/bow.cpp
+	src/sword/sword.h
+	src/sword/sword.cpp)
 	
 project(${PROJECT_NAME})
 

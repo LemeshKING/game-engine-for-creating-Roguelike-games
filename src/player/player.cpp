@@ -22,6 +22,8 @@ void Player::update(const float& time, const std::vector<std::vector<int>>& loca
    if (!onGround) dy = dy + 0.005 * time;
    rect.top += dy * time;
    onGround = false;
+   Weapon->update(rect.left + rect.width, rect.top);
+   
    CollisionY(location);
    rectangle.setPosition(rect.left, rect.top);
    if(camera.getCenterX() > (location[0].size() - 17) * 32)
@@ -35,7 +37,7 @@ void Player::update(const float& time, const std::vector<std::vector<int>>& loca
    dx = 0;
 }
 
-void Player::setCamera(Camera _camera)
+void Player::setCamera(Camera &_camera)
 {
    camera = _camera;
 }
@@ -44,6 +46,38 @@ Camera Player::getCamera()
 {
    return camera;
 }
+
+void Player::TakeDamage(int damageValue)
+{
+   health.TakeDamage(damageValue);
+   if(health.getHealthPoints() == 0)
+      Kill();
+   dx = -1 * direction * 5;
+   dy = -0.5;
+   immunity = true;
+      
+}
+
+bool Player::isImmunity()
+{
+   return immunity;
+}
+
+void Player::removeImmunity()
+{
+   immunity = false;
+}
+
+void Player::setWeapon(weapon *_weapon)
+{
+   Weapon = _weapon;
+}
+
+weapon* Player::getWeapon()
+{
+   return Weapon;
+}
+
 
 
 void Player::CollisionX(const std::vector<std::vector<int>>& location)
