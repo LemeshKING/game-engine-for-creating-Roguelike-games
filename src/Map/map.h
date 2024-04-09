@@ -1,5 +1,6 @@
 #pragma once
 #include "../proceduralgeneration/ProceduralGeneration.h"
+#include "../Tile/Tile.h"
 #include <random>
 namespace mp{
    class Map
@@ -10,8 +11,13 @@ namespace mp{
       float persistence = 0;
       int countNoiseFunction = 0;
       int startPlayerPosition;
+      int countCaves = 0;
+      int CavesWidth = 0;
+      bool canGenerateCave = true;
+     
    public:
-      std::vector<std::vector<int>> TileMap;
+      int tryRnd = 0;
+      std::vector<std::vector<Tile>> TileMap;
       std::vector<int> MapHeightValues;
       void GenerateMap();
       unsigned int getHeight();
@@ -24,6 +30,8 @@ namespace mp{
       int getStartPlayerPosition();
    private: 
       void smoothMap();
+      void GenerateCaves();
+      void SmoothCaves(std::vector<int> &Cave);
    
    };
 }

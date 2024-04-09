@@ -26,7 +26,11 @@ set(SOURCES_FILES src/main.cpp
 	src/bow/bow.h
 	src/bow/bow.cpp
 	src/sword/sword.h
-	src/sword/sword.cpp)
+	src/sword/sword.cpp
+	src/Tile/Tile.h
+	src/Tile/Tile.cpp
+	src/GameObject/GameObject.h
+	src/GameObject/GameObject.cpp)
 	
 project(${PROJECT_NAME})
 

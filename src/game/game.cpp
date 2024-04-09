@@ -19,9 +19,9 @@ void Game::Run(sf::RenderWindow &window)
 	Enemy enemy;
 	enemy.Initialization(32, 0);
 	sf::RectangleShape rectangle(sf::Vector2f(32, 32));
+	bool isMouseButtonPresed = false;
 
-
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(144);
 
 	
 	sf::Clock clock;
@@ -30,17 +30,18 @@ void Game::Run(sf::RenderWindow &window)
 	{
 		if(pl.isAlive())
 		{
-			sf::Time elapsedTime = clock.restart();
-			if(pl.isImmunity())
-				frames++;
-			if(frames > 60)
+			if(frames > 77)
 			{
 				pl.removeImmunity();
 				frames = 0;
 			}
 			float time = clock.getElapsedTime().asMicroseconds();
-			time /= 800;
+			time /= 1300;
+	/*		std::cout << time << "\t" << clock.getElapsedTime().asMicroseconds() << std::endl;
+			int tmp1 = 540 / 32;*/
+			//std::cout << tmp1 << std::endl;
 			clock.restart();
+
 			sf::Event event;
 			while (window.pollEvent(event))
 			{
@@ -48,55 +49,77 @@ void Game::Run(sf::RenderWindow &window)
 					window.close();
 	
 			}
-		
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			
+			if (pl.isImmunity())
+				frames++;
+			pl.satDown = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
+			if (!pl.satDown)
 			{
-				pl.setDx(1);
-				pl.setDirection(1);
-				if(pl.getCamera().getCenterX() >= (location.getWidth() - 15) * 32)
-					pl.getCamera().setCenterX((location.getWidth() - 15) * 32);
-			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-			{
-				pl.setDx(1);
-				pl.setDirection(-1);
 
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+				{
+					pl.setDx(0.25);
+					pl.setDirection(1);
+					if(pl.getCamera().getCenterX() >= (location.getWidth() - 15) * 32)
+						pl.getCamera().setCenterX((location.getWidth() - 15) * 32);
+				}
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+				{
+					pl.setDx(0.25);
+					pl.setDirection(-1);
+
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+				{
+					if (pl.isOnGround())
+						pl.setDy(-0.65);
+				}
+				if (!pl.isImmunity())
+				{
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+					{
+						pl.BecomeImmune();
+						pl.setDx(15);
+					}
+				}
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-			{
-				if (pl.isOnGround())
-					pl.setDy(-0.75);
-			}
+			
+
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
 		
-			for (int i = 0; i < location.getHeight(); i++)
+			for (int i = pl.getCamera().getCenterY() / 32 - 9; i < pl.getCamera().getCenterY() / 32 + 10; i++)
 				for (int j = pl.getCamera().getCenterX() / 32 - 15; j < pl.getCamera().getCenterX() / 32 + 17; j++)
 				{
-					if (location.TileMap[i][j] == 1)
-						rectangle.setFillColor(sf::Color::Black);
-					if (location.TileMap[i][j] == 0)
-						rectangle.setFillColor(sf::Color::White);
-					rectangle.setPosition(j * 32, i * 32);
-					window.draw(rectangle);
+					window.draw(location.TileMap[i][j].getSprite());
 				}
-			pl.update(5,location.TileMap);
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				window.draw(pl.getWeapon()->getRectangle());
+			pl.update(time,location.TileMap);
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !isMouseButtonPresed)
+				{
+					window.draw(pl.getWeapon()->getRectangle());
+					isMouseButtonPresed = true;
+				}
+			if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				isMouseButtonPresed = false;
 			for (int i = 0; i < Enemys.size(); i++)
 			{
-				
-				if(Enemys[i].getRect().left > pl.getCamera().getCenterX() - 512 && Enemys[i].getRect().left < pl.getCamera().getCenterX() + 576)
+				if(Enemys[i].isAlive())
 				{
-					if (!pl.isImmunity())
-						if(pl.getRect().intersects(Enemys[i].getRect()))
-							pl.TakeDamage(Enemys[i].getDamageValue());
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-						if(pl.getWeapon()->getRect().intersects(Enemys[i].getRect()))
-							std::cout << "Enemy Take Damage" << std::endl;
-					Enemys[i].update(5,location.TileMap);
-					window.draw(Enemys[i].getRectangle());
+					if(Enemys[i].getRect().left > pl.getCamera().getCenterX() - 512 && Enemys[i].getRect().left < pl.getCamera().getCenterX() + 576)
+					{
+						Enemys[i].setPlayerPosition(pl.getRect());
+						if (!pl.isImmunity())
+							if(pl.getRect().intersects(Enemys[i].getRect()))
+								pl.TakeDamage(Enemys[i].getDamageValue());
+						if (isMouseButtonPresed)
+							if(pl.getWeapon()->getRect().intersects(Enemys[i].getRect()))
+								Enemys[i].TakeDamage(pl.getWeapon()->getDamageValue());
+						Enemys[i].update(5,location.TileMap);
+						window.draw(Enemys[i].getRectangle());
+					}
 				}
+				else
+					Enemys.erase(Enemys.begin() + i);
 			}
 			weapon* Sword = pl.getWeapon();
 			sf::RectangleShape tmp = Sword->getRectangle();
@@ -134,7 +157,7 @@ void Game::Initialization()
    location.setHeight(70);
    location.setWidth(250);
    location.setPersistence(3);
-   location.setCountNoiseFunction(4);
+   location.setCountNoiseFunction(10);
    location.GenerateMap();
 	sword Sword;
 
@@ -147,10 +170,10 @@ void Game::Initialization()
 	tmp.setFillColor(sf::Color::Blue);
 	tmp.setPosition(Sword.getRect().left, Sword.getRect().top);
 	Sword.setRectangle(tmp);
-	
+	Sword.setDamageValue(100);
 	pl.setWeapon(&Sword);
 	pl.setHealth(health);
-	pl.getHealth().setHealthPoints(100);
+
 	sf::RenderWindow window(sf::VideoMode(w, h), "Ray tracing", sf::Style::Fullscreen);
 	Camera camera;
 	sf::View view;
@@ -161,17 +184,18 @@ void Game::Initialization()
 	camera.setWindowWidth(w);
 	camera.setViewMode(sf::Vector2u(w/2,h/2));
 	camera.setCenterX(w / 4);
-	camera.setCenterY(h / 4);
+	camera.setCenterY(h / 4 + 32);
 	Enemys.resize(30 + rand() % 50);
 	for(int i = 0; i < Enemys.size(); i++)
 	{
 		int tmp = 30 + rand() % (location.getWidth() - 50 + 1);
+		Enemys[i].setHealth(health);
 		Enemys[i].setCharacterHeight(50);
 		Enemys[i].setCharacterWidth(40);
 		Enemys[i].setDamageValue(10);
 		Enemys[i].Initialization(tmp * 32,(location.getHeight() - location.MapHeightValues[tmp] - 3) * 32);
 	}
-
+	std::cout << location.tryRnd << std::endl;
 		
 	
 	pl.setCamera(camera);

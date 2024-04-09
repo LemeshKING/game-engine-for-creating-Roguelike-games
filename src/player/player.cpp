@@ -14,25 +14,39 @@ void Player::Initialization(int x, int y)
    camera.setCenterY(rect.top);
 }
 
-void Player::update(const float& time, const std::vector<std::vector<int>>& location)
+void Player::update(const float time, std::vector<std::vector<Tile>>& location)
 {
+  
+   if(satDown)
+   {
+      rect.height = characterHeight / 1.35;
+
+   }
+   else 
+   {
+      rect.height = characterHeight;
+
+   }
    dx *= direction;
    rect.left += dx * time;
    CollisionX(location);
    if (!onGround) dy = dy + 0.005 * time;
    rect.top += dy * time;
    onGround = false;
-   Weapon->update(rect.left + rect.width, rect.top);
-   
+   if(direction > 0)
+      Weapon->update(rect.left + rect.width, rect.top);
+   else
+      Weapon->update(rect.left - Weapon->getRect().width, rect.top);
    CollisionY(location);
+   rectangle.setSize(sf::Vector2f(rect.width,rect.height));
    rectangle.setPosition(rect.left, rect.top);
+   camera.setCenterX(rect.left);
    if(camera.getCenterX() > (location[0].size() - 17) * 32)
       camera.setCenterX((location[0].size() - 17) * 32);
-   else if (rect.left < (location[0].size() - 17) * 32 && dx < 0)
-      camera.setCenterX(rect.left);
-   else if(camera.getCenterX() < (location[0].size() - 17) * 32)
-      camera.setCenterX(rect.left);
+
    camera.setCenterY(rect.top);
+   if(rect.top > (location.size() - 10) * 32)
+      camera.setCenterY((location.size() - 10) * 32);
    camera.setCenter();
    dx = 0;
 }
@@ -73,6 +87,11 @@ void Player::setWeapon(weapon *_weapon)
    Weapon = _weapon;
 }
 
+void Player::BecomeImmune()
+{
+   immunity = true;
+}
+
 weapon* Player::getWeapon()
 {
    return Weapon;
@@ -80,11 +99,11 @@ weapon* Player::getWeapon()
 
 
 
-void Player::CollisionX(const std::vector<std::vector<int>>& location)
+void Player::CollisionX(std::vector<std::vector<Tile>>& location)
 {
    for(int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for(int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
-         if(location[i][j] == 1)
+         if(location[i][j].getTileType() ==  1)
             if(dx > 0)
                rect .left = j * 32 - rect.width;
             else if (dx < 0)
@@ -92,11 +111,11 @@ void Player::CollisionX(const std::vector<std::vector<int>>& location)
             
 }
 
-void Player::CollisionY(const std::vector<std::vector<int>>& location)
+void Player::CollisionY(std::vector<std::vector<Tile>>& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
-         if (location[i][j] == 1)
+         if (location[i][j].getTileType() == 1)
             if (dy > 0)
             { 
                rect.top = i * 32 - rect.height; 

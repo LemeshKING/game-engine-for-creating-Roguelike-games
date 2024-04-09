@@ -6,11 +6,19 @@ class Enemy : public Character
 private: 
    int damageValue;
    float distance;
-   void Enemy::CollisionX(const std::vector<std::vector<int>>& location) override;
-   void Enemy::CollisionY(const std::vector<std::vector<int>>& location) override;
+   sf::FloatRect Vision;
+   sf::FloatRect playerPosition;
+
+   bool sawPlayer = false;
+   void Enemy::CollisionX( std::vector<std::vector<Tile>>& location) override;
+   void Enemy::CollisionY( std::vector<std::vector<Tile>>& location) override;
  public:
+    sf::RectangleShape visionRect;
+   void SawPlayer();
    void Initialization(int x, int y);
-   void update(const float& time, const std::vector<std::vector<int>>& location) override;
+   void update(const float time, std::vector<std::vector<Tile>>& location) override;
    void setDamageValue(int _damage);
    int getDamageValue();
+   sf::FloatRect getVision();
+   void setPlayerPosition(sf::FloatRect _PlayerPosition);
 };

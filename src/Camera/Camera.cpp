@@ -10,7 +10,10 @@ void Camera::setCenterX(int _centerX)
 
 void Camera::setCenterY(int _centerY)
 {
-   centerY = _centerY;
+   if(_centerY > viewMode.y / 2 + 32)
+      centerY = _centerY;
+   else
+      centerY = viewMode.y / 2 + 32;
 }
 
 int Camera::getCenterX()

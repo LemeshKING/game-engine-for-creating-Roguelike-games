@@ -352,62 +352,62 @@ int main()
 	//	//	window.draw(emptySprite,&shader);
 	//	//	
 	//	//}
-	//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	//	{
-	//		pl.dx = 0.5;
-	//	}
-	//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	//	{
-	//		pl.dx = -0.5;
-	//	}
-	//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	//	{
-	//		if(pl.onGround)
-	//			pl.dy =-2.5;
-	//	}
-	//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	//	{
-	//		if (mouseX < (Width - 32) * 32)
-	//			mouseX += 64;
-	//		view.setCenter(mouseX, mouseY);
-	//	}
-	//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	//	{
-	//		if (mouseX > 32 * 32)
-	//			mouseX -= 64;
-	//		view.setCenter(mouseX, mouseY);
+	////	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	////	{
+	////		pl.dx = 0.5;
+	////	}
+	////	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	////	{
+	////		pl.dx = -0.5;
+	////	}
+	////	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	////	{
+	////		if(pl.onGround)
+	////			pl.dy =-2.5;
+	////	}
+	////	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	////	{
+	////		if (mouseX < (Width - 32) * 32)
+	////			mouseX += 64;
+	////		view.setCenter(mouseX, mouseY);
+	////	}
+	////	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	////	{
+	////		if (mouseX > 32 * 32)
+	////			mouseX -= 64;
+	////		view.setCenter(mouseX, mouseY);
 
-	//	}
-	//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	//	{
-	//		mouseY -= 64;
-	//		view.setCenter(mouseX, mouseY);
+	////	}
+	////	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	////	{
+	////		mouseY -= 64;
+	////		view.setCenter(mouseX, mouseY);
 
-	//	}
-	//	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	//	{
-	//		mouseY += 64;
-	//		view.setCenter(mouseX, mouseY);
+	////	}
+	////	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	////	{
+	////		mouseY += 64;
+	////		view.setCenter(mouseX, mouseY);
 
-	//	}
-	//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-	//		window.close();
-	//	for (int i = 0; i < Height; i++)
-	//		for (int j = mouseX / 32 - 32; j < mouseX / 32 + 32; j++)
-	//		{
-	//			if (location.TileMap[i][j] == 1)
-	//				rectangle.setFillColor(sf::Color::Black);
-	//			if (location.TileMap[i][j] == 0)
-	//				rectangle.setFillColor(sf::Color::White);
-	//			rectangle.setPosition(j * 32, i * 32);
-	//			window.draw(rectangle);
-	//		}
-	//	pl.update(1);
-	//	window.draw(pl.rectangle);
-	//	window.display();
-	//	window.setView(view);
-	//	window.clear(sf::Color::White);
-	//}
+	////	}
+	////	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	////		window.close();
+	////	for (int i = 0; i < Height; i++)
+	////		for (int j = mouseX / 32 - 32; j < mouseX / 32 + 32; j++)
+	////		{
+	////			if (location.TileMap[i][j] == 1)
+	////				rectangle.setFillColor(sf::Color::Black);
+	////			if (location.TileMap[i][j] == 0)
+	////				rectangle.setFillColor(sf::Color::White);
+	////			rectangle.setPosition(j * 32, i * 32);
+	////			window.draw(rectangle);
+	////		}
+	////	pl.update(1);
+	////	window.draw(pl.rectangle);
+	////	window.display();
+	////	window.setView(view);
+	////	window.clear(sf::Color::White);
+	////}
 
 	return 0;
 }

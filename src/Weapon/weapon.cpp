@@ -23,6 +23,16 @@ sf::RectangleShape weapon::getRectangle()
 void weapon::update(int x, int y)
 {
    rect.left = x;
-   rect.top = y+10;
-   rectangle.setPosition(rect.left,rect.top);
+   rect.top = y + 10;
+   rectangle.setPosition(rect.left, rect.top);
+}
+
+void weapon::setDamageValue(unsigned int _damageValue)
+{
+   damageValue = _damageValue;
+}
+
+unsigned int weapon::getDamageValue()
+{
+   return damageValue;
 }
