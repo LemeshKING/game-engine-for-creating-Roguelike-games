@@ -67,7 +67,7 @@ void Character::setHealth(hlth::Health _Health)
 }
 
 void Character::TakeDamage(int damageValue)
-{
+{  
    health.TakeDamage(damageValue);
    if (health.getHealthPoints() == 0)
       Kill();

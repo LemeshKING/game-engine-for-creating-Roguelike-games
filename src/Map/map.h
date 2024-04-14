@@ -1,20 +1,27 @@
 #pragma once
 #include "../proceduralgeneration/ProceduralGeneration.h"
 #include "../Tile/Tile.h"
+#include "../enemy/enemy.h"
 #include <random>
 namespace mp{
    class Map
    {
    private:
+      std::vector<Enemy> Enemys;
+     
+      int countEnemys;
       unsigned int seed = 0;
       unsigned int Height = 0, Width = 0;
       float persistence = 0;
       int countNoiseFunction = 0;
       int startPlayerPosition;
+   public:
+      int currentEnemy = 0;
       int countCaves = 0;
       int CavesWidth = 0;
       bool canGenerateCave = true;
-     
+      int randomMapPoint;
+      std::vector<int> rndMapPoints;
    public:
       int tryRnd = 0;
       std::vector<std::vector<Tile>> TileMap;
@@ -27,11 +34,15 @@ namespace mp{
       void setPersistence(float _Persistence);
       void setCountNoiseFunction(int _Count);
       void setSeed(unsigned int _seed);
+      unsigned int getSeed();
       int getStartPlayerPosition();
+      std::vector<Enemy> getEnemys();
    private: 
       void smoothMap();
       void GenerateCaves();
       void SmoothCaves(std::vector<int> &Cave);
+      void FillMap();
+
    
    };
 }

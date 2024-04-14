@@ -8,15 +8,21 @@ private:
    float distance;
    sf::FloatRect Vision;
    sf::FloatRect playerPosition;
-
+   int chardgeAttack = 0;
+   int attackCooldown = 77;
+   int AttackRange = 33;
+   bool attacking = false;
    bool sawPlayer = false;
    void Enemy::CollisionX( std::vector<std::vector<Tile>>& location) override;
    void Enemy::CollisionY( std::vector<std::vector<Tile>>& location) override;
+   void Attack();
+   
  public:
-    sf::RectangleShape visionRect;
+  
    void SawPlayer();
    void Initialization(int x, int y);
    void update(const float time, std::vector<std::vector<Tile>>& location) override;
+   void TakeDamage(int damageValue) override;
    void setDamageValue(int _damage);
    int getDamageValue();
    sf::FloatRect getVision();

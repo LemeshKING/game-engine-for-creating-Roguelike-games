@@ -4,7 +4,7 @@
 
 void hlth::Health::TakeDamage(int damageValue)
 {
-   if(healthPoints - damageValue > 0)
+   if((int)healthPoints - damageValue > 0)
       healthPoints -= damageValue;
    else
       healthPoints = 0;

@@ -19,6 +19,9 @@ class Player : public Character
    void BecomeImmune();
    weapon* getWeapon();
    bool satDown = false;
+   bool dashing = false;
+   int dashFramers = 0;
+   int dashColdown = 77;
 private:
   
    weapon *Weapon;

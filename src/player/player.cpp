@@ -16,7 +16,20 @@ void Player::Initialization(int x, int y)
 
 void Player::update(const float time, std::vector<std::vector<Tile>>& location)
 {
-  
+   if(dashing)
+   {
+      dashFramers++;
+      dx = 0.5;
+      BecomeImmune();
+      dashColdown = 0;
+   }
+   if(dashFramers >= 44 && dashing)
+   {
+      dashFramers = 0;
+      dashing = false;
+      removeImmunity();
+   }
+   dashColdown++;
    if(satDown)
    {
       rect.height = characterHeight / 1.35;
@@ -31,6 +44,7 @@ void Player::update(const float time, std::vector<std::vector<Tile>>& location)
    rect.left += dx * time;
    CollisionX(location);
    if (!onGround) dy = dy + 0.005 * time;
+   if(dashing) dy = 0;
    rect.top += dy * time;
    onGround = false;
    if(direction > 0)
@@ -103,7 +117,7 @@ void Player::CollisionX(std::vector<std::vector<Tile>>& location)
 {
    for(int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for(int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
-         if(location[i][j].getTileType() ==  1)
+         if(location[i][j].getTileType() ==  1 || location[i][j].getTileType() == 3)
             if(dx > 0)
                rect .left = j * 32 - rect.width;
             else if (dx < 0)
@@ -115,7 +129,8 @@ void Player::CollisionY(std::vector<std::vector<Tile>>& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
-         if (location[i][j].getTileType() == 1)
+         if (location[i][j].getTileType() == 1  || location[i][j].getTileType() == 3)
+         { 
             if (dy > 0)
             { 
                rect.top = i * 32 - rect.height; 
@@ -127,4 +142,12 @@ void Player::CollisionY(std::vector<std::vector<Tile>>& location)
                rect.top = i * 32 + 32;
                dy = 0;
             }
+         }
+         else if (location[i][j].getTileType() == 4)
+         {
+            if(!immunity)
+               TakeDamage(health.getHealthPoints());
+                
+               
+         }
 }
