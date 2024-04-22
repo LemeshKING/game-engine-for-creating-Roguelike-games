@@ -1,5 +1,6 @@
 #include "map.h"
 
+
 void mp::Map::smoothMap()
 {
 	for (auto& i : MapHeightValues)
@@ -22,7 +23,7 @@ void mp::Map::smoothMap()
 void mp::Map::GenerateCaves()
 {
 	
-	CavesWidth = 100;
+	CavesWidth = 50;
 	countCaves = Width / CavesWidth;
 	rndMapPoints.resize(countCaves);
 	rndMapPoints[0] = abs((int)pg::PerlinNoise1D(seed, persistence, countNoiseFunction)) % (CavesWidth);
@@ -116,17 +117,34 @@ void mp::Map::GenerateCaves()
 				{
 					hlth::Health health;
 					health.setHealthPoints(100);
-					Enemys[currentEnemy].setHealth(health);
-					Enemys[currentEnemy].setCharacterHeight(50);
-					Enemys[currentEnemy].setCharacterWidth(40);
-					Enemys[currentEnemy].setDamageValue(10);
-					Enemys[currentEnemy].Initialization((i + rndMapPoints[k]) * 32, (Height - CavesHeight[i] - 3) * 32);
+					Enemy enemy;
+					Enemys[currentEnemy] = new Enemy();
+					Enemys[currentEnemy]->setCharacterHeight(50);
+					Enemys[currentEnemy]->setCharacterHeight(50);
+					Enemys[currentEnemy]->setCharacterWidth(40);
+					Enemys[currentEnemy]->setDamageValue(10);
+					Enemys[currentEnemy]->Initialization((i + rndMapPoints[k]) * 32, (Height - CavesHeight[i] - 3) * 32);
 					currentEnemy++;
 				}
 			}
 			else
 				break;
 		}
+		tmp.setFillColor(sf::Color::Color(200,66,77));
+		tmp.setSize(sf::Vector2f(32,96));
+		tmp.setPosition((rndMapPoints[k] + CavesWidth - 3) * 32, (Height - CavesHeight[CavesWidth - 2] - 2) * 32 - 64);
+		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object = new Teleport(rndMapPoints[k] * 32, (Height - CavesHeight[0] - 2) * 32);
+		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object->setSprite(tmp);
+		tmp.setFillColor(sf::Color::Color(11, 66, 77));
+		tmp.setSize(sf::Vector2f(35, 10));
+		tmp.setPosition((rndMapPoints[k] + CavesWidth - 5) * 32, (Height - CavesHeight[CavesWidth - 5] - 2) * 32);
+		tmp.setRotation(45);
+		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon = new sword();
+		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->setDamageValue(45);
+		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->setRect(tmp.getGlobalBounds());
+		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->setRectangle(tmp);
+		
+
 	}
 
 }
@@ -147,17 +165,32 @@ void mp::Map::SmoothCaves(std::vector<int>& Cave)
 
 void mp::Map::FillMap()
 {
-	sf::RectangleShape tmp(sf::Vector2f(32,32));
+
+	Thorns thorn;
+	sf::RectangleShape tmp(sf::Vector2f(32,36));
 	tmp.setFillColor(sf::Color::Color(55,72,32));
 	for(int i = 3; i < Width; i++)
 		if((MapHeightValues[i - 3] == MapHeightValues[i]) && (MapHeightValues[i - 3] - MapHeightValues[i - 2] == 1) && (MapHeightValues[i] - MapHeightValues[i - 1] == 1))
 		{
-			tmp.setPosition((i-2) * 32, (Height - 2 -MapHeightValues[i - 2]) * 32);
-			TileMap[Height - 2 - MapHeightValues[i - 2]][i - 2].setSprite(tmp);
-			TileMap[Height - 2 - MapHeightValues[i - 2]][i - 2].setType(4);
-			tmp.setPosition((i - 1) * 32, (Height - 2 -MapHeightValues[i - 1]) * 32);
-			TileMap[Height - 2 - MapHeightValues[i - 1]][i - 1].setSprite(tmp);
-			TileMap[Height - 2 - MapHeightValues[i - 1]][i - 1].setType(4);
+			tmp.setPosition((i - 2) * 32, (Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object = new Thorns();
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setSprite(tmp);
+			tmp.setPosition((i - 1) * 32, (Height - 2 -MapHeightValues[i - 1]) * 32 - 4);
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object = new Thorns();
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object->setSprite(tmp);
+		}
+	for (int i = 4; i < Width; i++)
+		if ((MapHeightValues[i - 4] == MapHeightValues[i]) && MapHeightValues[i - 4] - MapHeightValues[i - 3] == 1 && MapHeightValues[i] - MapHeightValues[i - 1] == 1)
+		{
+			tmp.setPosition((i - 3) * 32, (Height - 2 - MapHeightValues[i - 3]) * 32 - 4);
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 3].Object = new Thorns();
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 3].Object->setSprite(tmp);
+			tmp.setPosition((i - 2) * 32, (Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object = new Thorns();
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setSprite(tmp);
+			tmp.setPosition((i - 1) * 32, (Height - 2 - MapHeightValues[i - 1]) * 32 - 4);
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object = new Thorns();
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object->setSprite(tmp);
 		}
 	for (int i = 30; i < Width - 20; i++)
 	{
@@ -168,23 +201,29 @@ void mp::Map::FillMap()
 			{
 				hlth::Health health;
 				health.setHealthPoints(100);
-				Enemys[currentEnemy].setHealth(health);
-				Enemys[currentEnemy].setCharacterHeight(50);
-				Enemys[currentEnemy].setCharacterWidth(40);
-				Enemys[currentEnemy].setDamageValue(10);
-				Enemys[currentEnemy].Initialization(i * 32, (Height - MapHeightValues[i] - 3) * 32);
+				Enemys[currentEnemy] = new Wizard();
+				Enemys[currentEnemy]->setHealth(health);
+				Enemys[currentEnemy]->setCharacterHeight(50);
+				Enemys[currentEnemy]->setCharacterWidth(40);
+				Enemys[currentEnemy]->setDamageValue(20);
+				Enemys[currentEnemy]->Initialization(i * 32, (Height - MapHeightValues[i] - 3) * 32);
+				Enemys[currentEnemy];
 				currentEnemy++;
 			}
 		}
 		else
 			break;
 	}
+	for(int i = 0; i < Height; i++)
+		for(int j = 0; j < Width; j++)
+			TypeOfTiles[i][j] = TileMap[i][j].getTileType();
 }
 
-std::vector<Enemy> mp::Map::getEnemys()
+std::vector<Enemy*> mp::Map::getEnemys()
 {
 	return Enemys;
 }
+
 
 void mp::Map::GenerateMap()
 {
@@ -194,9 +233,12 @@ void mp::Map::GenerateMap()
 	countEnemys = 60 + abs((int)pg::PerlinNoise1D(seed,persistence,countNoiseFunction)) % 71;
 	Enemys.resize(countEnemys);
 	TileMap.resize(Height);
+	TypeOfTiles.resize(Height);
 	sf::RectangleShape tmp;
 	tmp.setFillColor(sf::Color::Magenta);
 	tmp.setSize(sf::Vector2f(32,32));
+	for (auto& i : TypeOfTiles)
+		i.resize(Width);
 	for(auto &i: TileMap)
 		i.resize(Width);
 	for(int i = 0; i < Height; i++)

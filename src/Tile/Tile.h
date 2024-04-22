@@ -6,12 +6,14 @@ class Tile
 {
 private:
    sf::RectangleShape sprite;
-   GameObject Object;
+
    int x = 0, y = 0;
    int tileWidth;
    int tileHeight;
    int tileType;
 public:
+   GameObject *Object;
+   weapon* Weapon;
    sf::RectangleShape getSprite();
    void setSprite(sf::RectangleShape _sprite);
    int getX();
@@ -20,4 +22,5 @@ public:
    void setY(int _y);
    void setType(int _tileType);
    int getTileType();
+
 };

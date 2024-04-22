@@ -14,7 +14,7 @@ void Player::Initialization(int x, int y)
    camera.setCenterY(rect.top);
 }
 
-void Player::update(const float time, std::vector<std::vector<Tile>>& location)
+void Player::update(const float time, std::vector<std::vector<int>>& location)
 {
    if(dashing)
    {
@@ -113,11 +113,11 @@ weapon* Player::getWeapon()
 
 
 
-void Player::CollisionX(std::vector<std::vector<Tile>>& location)
+void Player::CollisionX(std::vector<std::vector<int>>& location)
 {
    for(int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for(int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
-         if(location[i][j].getTileType() ==  1 || location[i][j].getTileType() == 3)
+         if(location[i][j] ==  1 || location[i][j] == 3)
             if(dx > 0)
                rect .left = j * 32 - rect.width;
             else if (dx < 0)
@@ -125,11 +125,11 @@ void Player::CollisionX(std::vector<std::vector<Tile>>& location)
             
 }
 
-void Player::CollisionY(std::vector<std::vector<Tile>>& location)
+void Player::CollisionY(std::vector<std::vector<int>>& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
-         if (location[i][j].getTileType() == 1  || location[i][j].getTileType() == 3)
+         if (location[i][j] == 1  || location[i][j] == 3)
          { 
             if (dy > 0)
             { 
@@ -143,7 +143,7 @@ void Player::CollisionY(std::vector<std::vector<Tile>>& location)
                dy = 0;
             }
          }
-         else if (location[i][j].getTileType() == 4)
+         else if (location[i][j] == 4)
          {
             if(!immunity)
                TakeDamage(health.getHealthPoints());

@@ -1,7 +1,6 @@
 #pragma once
 #include"../Health/health.h"
 #include"../AnimationManager/AnimationManager.h"
-#include"../Tile/Tile.h"
 
 
 class Character
@@ -12,7 +11,7 @@ class Character
    ar::AnimationManager Animation;
   
    Character();
-   virtual void update(const float time, std::vector<std::vector<Tile>> &location);
+   virtual void update(const float time, std::vector<std::vector<int>> &location);
    void setDirection(int _direction);
    void setDx(float _dx);
    void setDy(float _dy);
@@ -26,11 +25,15 @@ class Character
    virtual void TakeDamage(int damageValue);
    bool isAlive();
    void setRect(sf::FloatRect _rect);
-   
-   
+   void jump();
+   void stateOnGround();
+   void setLeft(float left);
+   void setTop(float top);
+   float getDx();
+   float getDy();
  private:
-   virtual void CollisionX(std::vector<std::vector<Tile>>& location);
-   virtual void CollisionY(std::vector<std::vector<Tile>>& location);
+   virtual void CollisionX(std::vector<std::vector<int>>& location);
+   virtual void CollisionY(std::vector<std::vector<int>>& location);
  protected: 
    bool alive = true;
    int direction = 1;

@@ -2,6 +2,7 @@
 #include "../enemy/enemy.h"
 #include "../Map/map.h"
 #include "../sword/sword.h"
+
 #include <iostream>
 class Game
 {
@@ -12,7 +13,7 @@ private:
    int mouseY = h / 2;
    
    mp::Map location;
-   std::vector<Enemy> Enemys;
+   std::vector<Enemy*> Enemys;
    Player pl;
 public:
    Game();

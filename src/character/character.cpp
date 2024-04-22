@@ -4,7 +4,7 @@ Character::Character()
 {
 }
 
-void Character::update(const float time, std::vector<std::vector<Tile>>& location)
+void Character::update(const float time, std::vector<std::vector<int>>& location)
 {
    rect.left += dx * time;
    CollisionX(location);
@@ -83,12 +83,44 @@ void Character::setRect(sf::FloatRect _rect)
    rect = _rect;
 }
 
+void Character::jump()
+{
+   onGround = false;
+}
 
-void Character::CollisionX(std::vector<std::vector<Tile>>& location)
+void Character::stateOnGround()
+{
+   onGround = true;
+}
+
+void Character::setLeft(float left)
+{
+   rect.left = left;
+}
+
+void Character::setTop(float top)
+{
+   rect.top = top;
+}
+
+float Character::getDx()
+{
+   return dx;
+}
+
+float Character::getDy()
+{
+   return dy;
+}
+
+
+
+
+void Character::CollisionX(std::vector<std::vector<int>>& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
-         if (location[i][j].getTileType() == 1)
+         if (location[i][j]== 1)
             if (dx > 0)
                rect.left = j * 32 - rect.width;
             else if (dx < 0)
@@ -96,11 +128,11 @@ void Character::CollisionX(std::vector<std::vector<Tile>>& location)
 }
 
 
-void Character::CollisionY(std::vector<std::vector<Tile>>& location)
+void Character::CollisionY(std::vector<std::vector<int>>& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
-         if (location[i][j].getTileType() == 1)
+         if (location[i][j] == 1)
             if (dy > 0)
             {
                rect.top = i * 32 - rect.height;

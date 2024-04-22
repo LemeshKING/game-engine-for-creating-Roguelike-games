@@ -30,7 +30,15 @@ set(SOURCES_FILES src/main.cpp
 	src/Tile/Tile.h
 	src/Tile/Tile.cpp
 	src/GameObject/GameObject.h
-	src/GameObject/GameObject.cpp)
+	src/GameObject/GameObject.cpp
+	src/thorns/thorns.h
+	src/thorns/thorns.cpp
+	src/teleport/teleport.h
+	src/teleport/teleport.cpp
+	src/Wizard/wizard.h
+	src/Wizard/wizard.cpp
+	src/ProjectTile/ProjectTile.h
+	src/ProjectTile/ProjectTile.cpp)
 	
 project(${PROJECT_NAME})
 

@@ -22,7 +22,7 @@ void Game::Run(sf::RenderWindow &window)
 	bool isMouseButtonPresed = false;
 
 	window.setFramerateLimit(144);
-
+	int raisingWeaponsFrames = 0;
 	
 	sf::Clock clock;
 	int AttackFrames = 0;
@@ -96,9 +96,32 @@ void Game::Run(sf::RenderWindow &window)
 		
 			for (int i = pl.getCamera().getCenterY() / 32 - 9; i < pl.getCamera().getCenterY() / 32 + 10; i++)
 				for (int j = pl.getCamera().getCenterX() / 32 - 15; j < pl.getCamera().getCenterX() / 32 + 17; j++)
+				{
 					window.draw(location.TileMap[i][j].getSprite());
-				
-			pl.update(time,location.TileMap);
+					if(location.TileMap[i][j].Object != nullptr)
+					{
+						if(pl.getRect().intersects(location.TileMap[i][j].Object->getSprite().getGlobalBounds()))
+							location.TileMap[i][j].Object->PlayerInteraction(pl);
+						window.draw(location.TileMap[i][j].Object->getSprite());
+					}
+					if(location.TileMap[i][j].Weapon != nullptr)
+					{
+						if (pl.getRect().intersects(location.TileMap[i][j].Weapon->getRect()))
+							if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && raisingWeaponsFrames > 77)
+							{
+								weapon* tmp = pl.getWeapon();
+								tmp->setRotation(45);
+								location.TileMap[i][j].Weapon->setRotation(0);
+								pl.setWeapon(location.TileMap[i][j].Weapon);
+								location.TileMap[i][j].Weapon = tmp;
+								raisingWeaponsFrames = 0;
+							}	
+						
+					window.draw(location.TileMap[i][j].Weapon->getRectangle());
+					}
+				}
+			raisingWeaponsFrames++;
+			pl.update(time,location.TypeOfTiles);
 			if(isMouseButtonPresed)
 			{
 				window.draw(pl.getWeapon()->getRectangle());
@@ -107,20 +130,28 @@ void Game::Run(sf::RenderWindow &window)
 			
 			for (int i = 0; i < Enemys.size(); i++)
 			{
-				if(Enemys[i].isAlive())
+				if(Enemys[i]->isAlive())
 				{
-					if(Enemys[i].getRect().left > pl.getCamera().getCenterX() - 512 && Enemys[i].getRect().left < pl.getCamera().getCenterX() + 576)
+					if(Enemys[i]->getRect().left > pl.getCamera().getCenterX() - 512 && Enemys[i]->getRect().left < pl.getCamera().getCenterX() + 576)
 					{
-						Enemys[i].setPlayerPosition(pl.getRect());
+						Enemys[i]->setPlayerPosition(pl.getRect());
 						if (!pl.isImmunity())
-							if(pl.getRect().intersects(Enemys[i].getRect()))
-								pl.TakeDamage(Enemys[i].getDamageValue());
+							if(pl.getRect().intersects(Enemys[i]->getRect()))
+								pl.TakeDamage(Enemys[i]->getDamageValue());
+						if (Enemys[i]->projectTile.isAlive())
+						{
+							Enemys[i]->projectTile.update(time);
+							window.draw(Enemys[i]->projectTile.getSprite());
+							if(pl.getRect().intersects(Enemys[i]->projectTile.getRect()))
+								if (!pl.isImmunity());
+									//pl.TakeDamage(Enemys[i]->projectTile.damageValue);
+						}
 						if (AttackFrames > 5)
-							if(pl.getWeapon()->getRect().intersects(Enemys[i].getRect()))
-								Enemys[i].TakeDamage(pl.getWeapon()->getDamageValue());
+							if(pl.getWeapon()->getRect().intersects(Enemys[i]->getRect()))
+								Enemys[i]->TakeDamage(pl.getWeapon()->getDamageValue());
 							
-						Enemys[i].update(time,location.TileMap);
-						window.draw(Enemys[i].getRectangle());
+						Enemys[i]->update(time,location.TypeOfTiles);
+						window.draw(Enemys[i]->getRectangle());
 					}
 				}
 				else
@@ -200,7 +231,7 @@ void Game::Initialization()
 		Enemys.resize(location.currentEnemy);
 	std::cout << location.tryRnd << std::endl;
 	std::cout << location.countCaves << std::endl;
-	
+
 	pl.setCamera(camera);
 	Run(window);
 

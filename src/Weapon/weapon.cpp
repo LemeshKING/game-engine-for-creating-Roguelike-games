@@ -36,3 +36,8 @@ unsigned int weapon::getDamageValue()
 {
    return damageValue;
 }
+
+void weapon::setRotation(float angel)
+{
+   rectangle.setRotation(angel);
+}

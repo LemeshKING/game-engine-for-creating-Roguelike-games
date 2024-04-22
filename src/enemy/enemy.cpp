@@ -16,7 +16,7 @@ void Enemy::Initialization(int x, int y)
    dx = 0.15;
 }
 
-void Enemy::update(const float time, std::vector<std::vector<Tile>>& location)
+void Enemy::update(const float time, std::vector<std::vector<int>>& location)
 {
    dx = 0.15 * direction;
    if(Vision.intersects(playerPosition) && !sawPlayer)
@@ -89,11 +89,11 @@ void Enemy::setPlayerPosition(sf::FloatRect _PlayerPosition)
    playerPosition = _PlayerPosition;
 }
 
-void Enemy::CollisionX(std::vector<std::vector<Tile>>& location)
+void Enemy::CollisionX(std::vector<std::vector<int>>& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
-         if (location[i][j].getTileType() == 1 || location[i][j].getTileType() == 3)
+         if (location[i][j] == 1 || location[i][j] == 3)
          {
             if (dx > 0)
                rect.left = j * 32 - rect.width;
@@ -108,11 +108,11 @@ void Enemy::CollisionX(std::vector<std::vector<Tile>>& location)
 }
 
 
-void Enemy::CollisionY( std::vector<std::vector<Tile>>& location)
+void Enemy::CollisionY( std::vector<std::vector<int>>& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
-         if (location[i][j].getTileType() == 1 || location[i][j].getTileType() == 3)
+         if (location[i][j] == 1 || location[i][j] == 3)
          {
             if (dy > 0)
             {
@@ -126,7 +126,7 @@ void Enemy::CollisionY( std::vector<std::vector<Tile>>& location)
                dy = 0;
             }
          }
-         else if (location[i][j].getTileType() == 4)
+         else if (location[i][j] == 4)
          {
             if (dx > 0)
                rect.left = j * 32 - rect.width;

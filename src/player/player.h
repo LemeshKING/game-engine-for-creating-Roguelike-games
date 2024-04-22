@@ -9,7 +9,7 @@ class Player : public Character
 
    Player();
    void Initialization(int x, int y);
-   void update(const float time, std::vector<std::vector<Tile>>& location) override;
+   void update(const float time, std::vector<std::vector<int>>& location) override;
    void setCamera(Camera &_camera);
    Camera getCamera();
    void TakeDamage(int damageValue) override;
@@ -27,6 +27,6 @@ private:
    weapon *Weapon;
    bool immunity = false;
    Camera camera;
-   void CollisionX(std::vector<std::vector<Tile>>& location) override;
-   void CollisionY(std::vector<std::vector<Tile>>& location) override;
+   void CollisionX(std::vector<std::vector<int>>& location) override;
+   void CollisionY(std::vector<std::vector<int>>& location) override;
 };

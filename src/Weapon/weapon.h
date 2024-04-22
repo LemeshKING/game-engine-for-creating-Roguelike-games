@@ -11,6 +11,7 @@ class weapon
    void update(int x, int y);
    void setDamageValue(unsigned int _damageValue);
    unsigned int getDamageValue();
+   void setRotation(float angel);
  protected:
    unsigned int damageValue;
    sf::FloatRect rect;
