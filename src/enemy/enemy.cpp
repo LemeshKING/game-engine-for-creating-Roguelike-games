@@ -35,7 +35,7 @@ void Enemy::update(const float time, std::vector<std::vector<int>>& location)
    {
       if(abs(playerPosition.left - rect.left) > AttackRange) // rect.width >> atackRange;
          direction = (playerPosition.left - rect.left) / abs(playerPosition.left - rect.left);
-      else
+      else 
          attacking = true;
       
    }

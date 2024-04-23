@@ -1,4 +1,5 @@
 #include "ProjectTile.h"
+#include <iostream>
 
 ProjectTile::ProjectTile()
 {
@@ -27,15 +28,17 @@ void ProjectTile::setHitBox(sf::FloatRect _HitBox)
 
 void ProjectTile::update(const float time)
 {
-   if(distance < 220)
+   if(distance < 400)
    {  
       hitBox.left += dx * direction.x * time;
       hitBox.top += dy * direction.y * time;
       distance += sqrt(dx * dx * time * time + dy * dy * time * time);
       rectangle.setPosition(hitBox.left, hitBox.top);
+      rectangle.setRotation(angel);
    }
    else
    {
+      std::cout << distance << std::endl;
       alive = false;
       distance = 0;
    }

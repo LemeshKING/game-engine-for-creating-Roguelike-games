@@ -136,8 +136,8 @@ void Game::Run(sf::RenderWindow &window)
 					{
 						Enemys[i]->setPlayerPosition(pl.getRect());
 						if (!pl.isImmunity())
-							if(pl.getRect().intersects(Enemys[i]->getRect()))
-								pl.TakeDamage(Enemys[i]->getDamageValue());
+							if(pl.getRect().intersects(Enemys[i]->getRect()));
+								//pl.TakeDamage(Enemys[i]->getDamageValue());
 						if (Enemys[i]->projectTile.isAlive())
 						{
 							Enemys[i]->projectTile.update(time);

@@ -8,11 +8,12 @@ class ProjectTile
    sf::FloatRect hitBox;
    sf::RectangleShape rectangle;
    sf::Vector2i direction;
-   float distance;
+   float distance = 0;
    bool alive = false;
  public:
-    float dx = 0.25;
-    float dy = 0.15;
+   float dx = 0.25;
+   float dy = 0.15;
+   float angel = 0;
    int damageValue = 30;
    ProjectTile();
    void setSprite(sf::RectangleShape _rectangle);
