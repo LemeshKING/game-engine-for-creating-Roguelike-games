@@ -38,7 +38,11 @@ set(SOURCES_FILES src/main.cpp
 	src/Wizard/wizard.h
 	src/Wizard/wizard.cpp
 	src/ProjectTile/ProjectTile.h
-	src/ProjectTile/ProjectTile.cpp)
+	src/ProjectTile/ProjectTile.cpp
+	src/HealthBar/HealthBar.h
+	src/HealthBar/HealthBar.cpp
+	src/Animation/Animation.h
+	src/Animation/Animation.cpp)
 	
 project(${PROJECT_NAME})
 

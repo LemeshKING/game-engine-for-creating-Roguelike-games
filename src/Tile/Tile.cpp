@@ -1,17 +1,17 @@
 #include "Tile.h"
 
-sf::RectangleShape Tile::getSprite()
+sf::Sprite Tile::getSprite()
 {
    return sprite;
 }
 
-void Tile::setSprite(sf::RectangleShape _sprite)
+void Tile::setSprite(sf::Sprite _sprite)
 {
    sprite = _sprite;
    x = _sprite.getPosition().x;
    y = _sprite.getPosition().y;
-   tileWidth = _sprite.getSize().x;
-   tileHeight = _sprite.getSize().y;
+   tileWidth = 32;
+   tileHeight = 32;
 }
 
 int Tile::getX()

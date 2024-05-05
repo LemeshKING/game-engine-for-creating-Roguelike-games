@@ -22,6 +22,8 @@ class Player : public Character
    bool dashing = false;
    int dashFramers = 0;
    int dashColdown = 77;
+protected:
+   void ChangeStateCharacter() override;
 private:
   
    weapon *Weapon;

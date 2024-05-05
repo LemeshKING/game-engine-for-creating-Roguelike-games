@@ -3,5 +3,7 @@
 
 class sword : public weapon
 {
+public:
+   sword();
    void Attack() override;
 };

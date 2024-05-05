@@ -5,16 +5,12 @@ void GameObject::PlayerInteraction(Player& _player)
 
 }
 
-void GameObject::setSprite(sf::RectangleShape _sprite)
+void GameObject::setSprite(sf::Sprite _sprite)
 {
    sprite = _sprite;
-   x = _sprite.getPosition().x;
-   y = _sprite.getPosition().y;
-   SizeX = _sprite.getSize().x;
-   SizeY = _sprite.getSize().y;
 }
 
-sf::RectangleShape GameObject::getSprite()
+sf::Sprite GameObject::getSprite()
 {
    return sprite;
 }
@@ -22,11 +18,13 @@ sf::RectangleShape GameObject::getSprite()
 void GameObject::setX(int _x)
 {
    x = _x;
+   sprite.setPosition(x, y);
 }
 
 void GameObject::setY(int _y)
 {
    y = _y;
+   sprite.setPosition(x, y);
 }
 
 int GameObject::getX()

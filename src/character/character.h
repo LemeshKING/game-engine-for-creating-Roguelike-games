@@ -6,10 +6,11 @@
 class Character
 {
  public:
+   std::map<std::string, bool> key;
+   ar::AnimationManager animation;
+ 
 
-   hlth::Health health;
-   ar::AnimationManager Animation;
-  
+
    Character();
    virtual void update(const float time, std::vector<std::vector<int>> &location);
    void setDirection(int _direction);
@@ -31,10 +32,14 @@ class Character
    void setTop(float top);
    float getDx();
    float getDy();
+   int getDirection();
  private:
    virtual void CollisionX(std::vector<std::vector<int>>& location);
    virtual void CollisionY(std::vector<std::vector<int>>& location);
  protected: 
+   enum State{ stay, walk, jumping, attack } CharacterState;
+   hlth::Health health;
+   sf::Texture texture;
    bool alive = true;
    int direction = 1;
    int characterHeight = 0;
@@ -46,4 +51,5 @@ class Character
    bool onGround = false;
    sf::RectangleShape rectangle;
    void Kill();
+   virtual void ChangeStateCharacter();
 };

@@ -2,7 +2,7 @@
 
 void Wizard::update(const float time, std::vector<std::vector<int>>& location)
 {
-   dx = 0.15 * direction;
+   dx = 0.1 * direction;
    if (Vision.intersects(playerPosition) && !sawPlayer)
       sawPlayer = true;
    if (!sawPlayer)
@@ -59,13 +59,13 @@ void Wizard::update(const float time, std::vector<std::vector<int>>& location)
 
 void Wizard::Initialization(int x, int y)
 {
-   rectangle.setFillColor(sf::Color::Red);
+   rectangle.setFillColor(sf::Color::Color(225,70,70));
    rect = sf::FloatRect(x, y, characterWidth, characterHeight);
    Vision = sf::FloatRect(x + characterWidth, y - characterHeight, 400, 400);
    rectangle.setSize(sf::Vector2f(rect.width, rect.height));
    rectangle.setPosition(sf::Vector2f(rect.left, rect.top));
 
-   dx = 0.15;
+   dx = 0.1;
 }
 
 void Wizard::Attack()
@@ -75,12 +75,12 @@ void Wizard::Attack()
       projectTile.Initialization(rect.left, rect.top);
       projectTile.setDirection(directionAtack);
       float length = sqrt((playerPosition.left + playerPosition.width / 2 - rect.left) * (playerPosition.left + playerPosition.width / 2 - rect.left) + (playerPosition.top + playerPosition.height / 2 - rect.top) * (playerPosition.top + playerPosition.height / 2 - rect.top));
-      projectTile.dx = abs(playerPosition.left + playerPosition.width / 2 - rect.left) / length * 0.25;
-      projectTile.dy = abs(playerPosition.top + playerPosition.height / 2 - rect.top) / length * 0.25;
+      projectTile.dx = abs(playerPosition.left + playerPosition.width / 2 - rect.left) / length * 0.35;
+      projectTile.dy = abs(playerPosition.top + playerPosition.height / 2 - rect.top) / length * 0.35;
       float dotProduct = (playerPosition.left + playerPosition.width / 2 - rect.left) * (playerPosition.left + playerPosition.width / 2 - rect.left);
       projectTile.angel = acos(dotProduct / (length * (playerPosition.left + playerPosition.width / 2 - rect.left))) * 180 / 3.141592653589793;
-      if(direction == 1)
-         projectTile.angel *=-1;
+      if(directionAtack.y < 0)
+         projectTile.angel *= -1;
       attacking = false;
       chardgeAttack = 0;
    }

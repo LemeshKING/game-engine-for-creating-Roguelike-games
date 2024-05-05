@@ -69,9 +69,10 @@ void mp::Map::GenerateCaves()
 		for(int i = rndMapPoints[k] + 1; i < rndMapPoints[k] + CavesWidth; i++)
 			CavesHeight[i - rndMapPoints[k]] = abs((int)pg::PerlinNoise1D(i * seed, persistence, countNoiseFunction) % (CavesHeight[0] - 6));
 		SmoothCaves(CavesHeight);
-		sf::RectangleShape tmp;
-		tmp.setFillColor(sf::Color::Black);
-		tmp.setSize(sf::Vector2f(32, 32));
+		sf::Sprite tmp;
+		tmp.setTexture(texture);
+		tmp.setTextureRect(sf::IntRect(64,0,32,32));
+	
 		for (int i = rndMapPoints[k]; i < rndMapPoints[k] + CavesWidth; i++)
 		{
 			tmp.setPosition(i * 32, (Height - 1 - CavesHeight[i - rndMapPoints[k]]) * 32);
@@ -79,7 +80,7 @@ void mp::Map::GenerateCaves()
 			TileMap[Height - 1 - CavesHeight[i- rndMapPoints[k]]][i].setType(1);
 		}
 
-		for (int i = MapHeightValues[rndMapPoints[k] + CavesWidth - 1]; i > 0; i--)
+		for (int i = MapHeightValues[rndMapPoints[k] + CavesWidth - 1] - 1; i > 0; i--)
 		{
 			tmp.setPosition((rndMapPoints[k] + CavesWidth - 1) * 32, (Height - 1 - i) * 32);
 			TileMap[Height - 1 - i][rndMapPoints[k] + CavesWidth - 1].setSprite(tmp);
@@ -101,7 +102,7 @@ void mp::Map::GenerateCaves()
 				TileMap[Height - 1 - j][i].setType(3);
 			}
 		}
-		tmp.setFillColor(sf::Color::Magenta);
+		tmp.setTextureRect(sf::IntRect(96, 0, 32, 32));
 		for(int i = rndMapPoints[k] + 1; i < rndMapPoints[k] + 5; i++)
 		{
 			tmp.setPosition(i * 32, (Height - 1 - MapHeightValues[i]) * 32);
@@ -117,8 +118,12 @@ void mp::Map::GenerateCaves()
 				{
 					hlth::Health health;
 					health.setHealthPoints(100);
-					Enemy enemy;
-					Enemys[currentEnemy] = new Enemy();
+					int TypeEnemy = abs((int)pg::PerlinNoise1D(i * seed * currentEnemy, persistence, countNoiseFunction)) % 100;
+					if (TypeEnemy < 70)
+						Enemys[currentEnemy] = new Enemy();
+					else
+						Enemys[currentEnemy] = new Wizard();
+					Enemys[currentEnemy]->setHealth(health);
 					Enemys[currentEnemy]->setCharacterHeight(50);
 					Enemys[currentEnemy]->setCharacterHeight(50);
 					Enemys[currentEnemy]->setCharacterWidth(40);
@@ -130,19 +135,18 @@ void mp::Map::GenerateCaves()
 			else
 				break;
 		}
-		tmp.setFillColor(sf::Color::Color(200,66,77));
-		tmp.setSize(sf::Vector2f(32,96));
-		tmp.setPosition((rndMapPoints[k] + CavesWidth - 3) * 32, (Height - CavesHeight[CavesWidth - 2] - 2) * 32 - 64);
+		sf::Sprite tmp1;
 		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object = new Teleport(rndMapPoints[k] * 32, (Height - CavesHeight[0] - 2) * 32);
-		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object->setSprite(tmp);
-		tmp.setFillColor(sf::Color::Color(11, 66, 77));
-		tmp.setSize(sf::Vector2f(35, 10));
-		tmp.setPosition((rndMapPoints[k] + CavesWidth - 5) * 32, (Height - CavesHeight[CavesWidth - 5] - 2) * 32);
-		tmp.setRotation(45);
+		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object->setX((rndMapPoints[k] + CavesWidth - 3) * 32);
+		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object->setY((Height - CavesHeight[CavesWidth - 2] - 2) * 32 - 64);
 		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon = new sword();
-		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->setDamageValue(45);
-		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->setRect(tmp.getGlobalBounds());
-		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->setRectangle(tmp);
+		tmp1 = TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->getSprite();
+		tmp1.setPosition((rndMapPoints[k] + CavesWidth - 5) * 32, (Height - CavesHeight[CavesWidth - 5] - 2) * 32);
+		tmp1.setRotation(45);
+		
+		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->setDamageValue(55);
+		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->setRect(tmp1.getGlobalBounds());
+		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->setSrite(tmp1);
 		
 
 	}
@@ -166,31 +170,37 @@ void mp::Map::SmoothCaves(std::vector<int>& Cave)
 void mp::Map::FillMap()
 {
 
-	Thorns thorn;
-	sf::RectangleShape tmp(sf::Vector2f(32,36));
-	tmp.setFillColor(sf::Color::Color(55,72,32));
 	for(int i = 3; i < Width; i++)
 		if((MapHeightValues[i - 3] == MapHeightValues[i]) && (MapHeightValues[i - 3] - MapHeightValues[i - 2] == 1) && (MapHeightValues[i] - MapHeightValues[i - 1] == 1))
 		{
-			tmp.setPosition((i - 2) * 32, (Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
+			//tmp.setPosition((i - 2) * 32, (Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
 			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object = new Thorns();
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setSprite(tmp);
-			tmp.setPosition((i - 1) * 32, (Height - 2 -MapHeightValues[i - 1]) * 32 - 4);
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object = new Thorns();
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object->setSprite(tmp);
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setX((i - 2) * 32);
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setY((Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
+			//tmp.setPosition((i - 1) * 32, (Height - 2 -MapHeightValues[i - 1]) * 32 - 4);
+			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object = new Thorns();
+	/*		TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object->setSprite(tmp);*/
+			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setX((i - 1) * 32);
+			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setY((Height - 2 - MapHeightValues[i - 1]) * 32 - 4);
 		}
 	for (int i = 4; i < Width; i++)
 		if ((MapHeightValues[i - 4] == MapHeightValues[i]) && MapHeightValues[i - 4] - MapHeightValues[i - 3] == 1 && MapHeightValues[i] - MapHeightValues[i - 1] == 1)
 		{
-			tmp.setPosition((i - 3) * 32, (Height - 2 - MapHeightValues[i - 3]) * 32 - 4);
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 3].Object = new Thorns();
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 3].Object->setSprite(tmp);
-			tmp.setPosition((i - 2) * 32, (Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
+			
+			TileMap[Height - 1 - MapHeightValues[i - 3]][i - 3].Object = new Thorns();
+			//TileMap[Height - 1 - MapHeightValues[i - 2]][i - 3].Object->setSprite(tmp);
+			TileMap[Height - 1 - MapHeightValues[i - 3]][i - 3].Object->setX((i - 3) * 32);
+			TileMap[Height - 1 - MapHeightValues[i - 3]][i - 3].Object->setY((Height - 2 - MapHeightValues[i - 3]) * 32 - 4);
+			/*tmp.setPosition((i - 2) * 32, (Height - 2 - MapHeightValues[i - 2]) * 32 - 4);*/
 			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object = new Thorns();
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setSprite(tmp);
-			tmp.setPosition((i - 1) * 32, (Height - 2 - MapHeightValues[i - 1]) * 32 - 4);
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object = new Thorns();
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object->setSprite(tmp);
+			//TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setSprite(tmp);
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setX((i - 2) * 32);
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setY((Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
+			/*tmp.setPosition((i - 1) * 32, (Height - 2 - MapHeightValues[i - 1]) * 32 - 4);*/
+			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object = new Thorns();
+			//TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object->setSprite(tmp);
+			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setX((i - 1) * 32);
+			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setY((Height - 2 - MapHeightValues[i - 1]) * 32 - 4);
 		}
 	for (int i = 30; i < Width - 20; i++)
 	{
@@ -201,11 +211,15 @@ void mp::Map::FillMap()
 			{
 				hlth::Health health;
 				health.setHealthPoints(100);
-				Enemys[currentEnemy] = new Wizard();
+				int TypeEnemy = abs((int)pg::PerlinNoise1D(i * seed + currentEnemy, persistence, countNoiseFunction)) % 100;
+				if(TypeEnemy < 70)
+					Enemys[currentEnemy] = new Enemy();
+				else 
+					Enemys[currentEnemy] = new Wizard();
 				Enemys[currentEnemy]->setHealth(health);
 				Enemys[currentEnemy]->setCharacterHeight(50);
 				Enemys[currentEnemy]->setCharacterWidth(40);
-				Enemys[currentEnemy]->setDamageValue(20);
+				Enemys[currentEnemy]->setDamageValue(10);
 				Enemys[currentEnemy]->Initialization(i * 32, (Height - MapHeightValues[i] - 3) * 32);
 				Enemys[currentEnemy];
 				currentEnemy++;
@@ -234,9 +248,11 @@ void mp::Map::GenerateMap()
 	Enemys.resize(countEnemys);
 	TileMap.resize(Height);
 	TypeOfTiles.resize(Height);
-	sf::RectangleShape tmp;
-	tmp.setFillColor(sf::Color::Magenta);
-	tmp.setSize(sf::Vector2f(32,32));
+	sf::Sprite tmp;
+	if(!texture.loadFromFile("../src/Map/tileset.png"))
+		texture.loadFromFile("../../src/Map/tileset.png");
+	tmp.setTexture(texture);
+	tmp.setTextureRect(sf::IntRect(96,0,32,32));
 	for (auto& i : TypeOfTiles)
 		i.resize(Width);
 	for(auto &i: TileMap)
@@ -251,7 +267,7 @@ void mp::Map::GenerateMap()
    for(int i = 0; i < Width; i++)
 		MapHeightValues[i] =abs((int)pg::PerlinNoise1D(i * seed, persistence, countNoiseFunction)) % Height;
    smoothMap();
-	tmp.setFillColor(sf::Color::Black);
+	tmp.setTextureRect(sf::IntRect(0, 0, 32, 32));
 	for (int j = 0; j < Width; j++)
 	{
 		tmp.setPosition(j * 32, (Height - 1 - MapHeightValues[j]) * 32);
@@ -259,6 +275,7 @@ void mp::Map::GenerateMap()
 		TileMap[Height - 1 - MapHeightValues[j]][j].setType(1);
 	}
 	GenerateCaves();
+	tmp.setTextureRect(sf::IntRect(32, 0, 32, 32));
 	for (int i = 0; i < rndMapPoints[0]; i++)
 		for (int j = MapHeightValues[i] - 1; j > 0; j--)
 		{

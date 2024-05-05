@@ -22,11 +22,12 @@ protected:
    virtual void Attack();
    ProjectTile projectTile;
    void SawPlayer();
-   void Initialization(int x, int y);
+   virtual void Initialization(int x, int y);
    void update(const float time, std::vector<std::vector<int>>& location) override;
    void TakeDamage(int damageValue) override;
    void setDamageValue(int _damage);
    int getDamageValue();
    sf::FloatRect getVision();
    void setPlayerPosition(sf::FloatRect _PlayerPosition);
+   bool wasAttaking = false;
 };

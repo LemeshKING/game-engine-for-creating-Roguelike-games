@@ -113,6 +113,11 @@ float Character::getDy()
    return dy;
 }
 
+int Character::getDirection()
+{
+    return direction;
+}
+
 
 
 
@@ -149,4 +154,9 @@ void Character::CollisionY(std::vector<std::vector<int>>& location)
 void Character::Kill()
 {
    alive = false;
+}
+
+void Character::ChangeStateCharacter()
+{
+
 }

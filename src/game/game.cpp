@@ -23,10 +23,11 @@ void Game::Run(sf::RenderWindow &window)
 
 	window.setFramerateLimit(144);
 	int raisingWeaponsFrames = 0;
-	
+
 	sf::Clock clock;
 	int AttackFrames = 0;
 	int frames = 0;
+	bool onceAttack = true;
 	while (window.isOpen())
 	{
 		if(pl.isAlive())
@@ -38,12 +39,11 @@ void Game::Run(sf::RenderWindow &window)
 			}
 			float time = clock.getElapsedTime().asMicroseconds();
 			time /= 1300;
-	/*		std::cout << time << "\t" << clock.getElapsedTime().asMicroseconds() << std::endl;
-			int tmp1 = 540 / 32;*/
+			//std::cout << time << std::endl;
 			//std::cout << tmp1 << std::endl;
 			
 			clock.restart();
-
+;
 			sf::Event event;
 			while (window.pollEvent(event))
 			{
@@ -51,45 +51,47 @@ void Game::Run(sf::RenderWindow &window)
 					window.close();
 				if(event.type == sf::Event::MouseButtonPressed)
 					if (event.key.code == sf::Mouse::Left)
+					{
 						isMouseButtonPresed = true;
+						pl.key["Attack"] = true;
+					}
 					
 			}
 			
-			if (pl.isImmunity())
+			if (pl.isImmunity() && !pl.dashing)
 				frames++;
-		
+
 			if(!pl.dashing)
 			{
-				//pl.satDown = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
+				pl.satDown = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
 				if (!pl.satDown)
 				{
 
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 					{
-						pl.setDx(0.25);
-						pl.setDirection(1);
+						pl.key["R"] = true;
 						if(pl.getCamera().getCenterX() >= (location.getWidth() - 15) * 32)
 							pl.getCamera().setCenterX((location.getWidth() - 15) * 32);
+
 					}
-					else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-					{
-						pl.setDx(0.25);
-						pl.setDirection(-1);
-					}
+					else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))	
+						pl.key["L"] = true;
+			
+					
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 					{
-						if (pl.isOnGround())
-							pl.setDy(-0.65);
+						pl.key["Up"] = true;
 					}
 					if (pl.dashColdown > 77)
 					{
 						if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-							pl.dashing = true;
-					
+							pl.key["Dash"] = true;
+
 					}
 				}
 			}
-			
+
+
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
@@ -117,14 +119,21 @@ void Game::Run(sf::RenderWindow &window)
 								raisingWeaponsFrames = 0;
 							}	
 						
-					window.draw(location.TileMap[i][j].Weapon->getRectangle());
+					window.draw(location.TileMap[i][j].Weapon->getSprite());
 					}
 				}
 			raisingWeaponsFrames++;
 			pl.update(time,location.TypeOfTiles);
-			if(isMouseButtonPresed)
+			healthBar.setX(pl.getRect().left);
+			healthBar.setY(pl.getRect().top);
+			if(healthBar.getFullHealthBar().getSize().x > pl.getRect().left)
+				healthBar.setX(healthBar.getFullHealthBar().getSize().x);
+			else if(pl.getRect().left > (location.getWidth() - 17) * 32)
+				healthBar.setX((location.getWidth() - 17) * 32);
+			healthBar.update(pl.getHealth().getHealthPoints());
+			if(pl.animation.getAnimation().getFrame() >= 2 && pl.key["Attack"] == true)
 			{
-				window.draw(pl.getWeapon()->getRectangle());
+				window.draw(pl.getWeapon()->getSprite());
 				AttackFrames++;
 			}
 			
@@ -135,39 +144,49 @@ void Game::Run(sf::RenderWindow &window)
 					if(Enemys[i]->getRect().left > pl.getCamera().getCenterX() - 512 && Enemys[i]->getRect().left < pl.getCamera().getCenterX() + 576)
 					{
 						Enemys[i]->setPlayerPosition(pl.getRect());
-						if (!pl.isImmunity())
-							if(pl.getRect().intersects(Enemys[i]->getRect()));
-								//pl.TakeDamage(Enemys[i]->getDamageValue());
+							if(pl.getRect().intersects(Enemys[i]->getRect()))
+								pl.TakeDamage(Enemys[i]->getDamageValue());
 						if (Enemys[i]->projectTile.isAlive())
 						{
 							Enemys[i]->projectTile.update(time);
 							window.draw(Enemys[i]->projectTile.getSprite());
 							if(pl.getRect().intersects(Enemys[i]->projectTile.getRect()))
-								if (!pl.isImmunity());
-									//pl.TakeDamage(Enemys[i]->projectTile.damageValue);
+									pl.TakeDamage(Enemys[i]->projectTile.damageValue);
 						}
-						if (AttackFrames > 5)
+						if (pl.animation.getAnimation().getFrame() >= 2 && pl.key["Attack"] == true && !Enemys[i]->wasAttaking)
 							if(pl.getWeapon()->getRect().intersects(Enemys[i]->getRect()))
+							{
 								Enemys[i]->TakeDamage(pl.getWeapon()->getDamageValue());
-							
+								Enemys[i]->wasAttaking = true;
+							}
 						Enemys[i]->update(time,location.TypeOfTiles);
 						window.draw(Enemys[i]->getRectangle());
 					}
 				}
 				else
+				{
+					delete Enemys[i];
 					Enemys.erase(Enemys.begin() + i);
+				}
 			}
-			if (AttackFrames > 5)
+		
+			if (pl.animation.getAnimation().getFrame() == 4 && pl.key["Attack"] == true)
 			{
 				AttackFrames = 0;
+				onceAttack = true;
 				isMouseButtonPresed = false;
+				pl.key["Attack"] = false;
+				pl.animation.setFrame(0);
+				for(auto i : Enemys)
+					i->wasAttaking = false;
 			}
 			weapon* Sword = pl.getWeapon();
 			sf::RectangleShape tmp = Sword->getRectangle();
-
+			window.draw(healthBar.getFullHealthBar());
+			window.draw(healthBar.getCurrentHealthBar());
+			window.draw(pl.animation.getAnimation().getSprite());
 			//window.draw(pl.getWeapon()->getRectangle());
-			
-			window.draw(pl.getRectangle());
+			//window.draw(pl.getRectangle());
 			window.display();
 			window.setView(pl.getCamera().getView());
 			window.clear(sf::Color::White);
@@ -214,7 +233,7 @@ void Game::Initialization()
 	Sword.setDamageValue(34);
 	pl.setWeapon(&Sword);
 	pl.setHealth(health);
-
+	healthBar.Initialization(pl.getHealth().getMaxHealthPoints(),0, location.getStartPlayerPosition() + 7);
 	sf::RenderWindow window(sf::VideoMode(w, h), "Ray tracing", sf::Style::Fullscreen);
 	Camera camera;
 	sf::View view;

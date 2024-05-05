@@ -10,8 +10,10 @@ public:
       AttackRange = 200;
       attackCooldown = 70;
    }
-   sf::Vector2i directionAtack;
+
    void update(const float time, std::vector<std::vector<int>>& location) override;
-   void Initialization(int x, int y);
+   void Initialization(int x, int y) override;
    void Attack() override;
+private:
+   sf::Vector2i directionAtack;
 };

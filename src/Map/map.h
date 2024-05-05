@@ -18,6 +18,7 @@ namespace mp{
       float persistence = 0;
       int countNoiseFunction = 0;
       int startPlayerPosition;
+      sf::Texture texture;
    public:
       int currentEnemy = 0;
       int countCaves = 0;
