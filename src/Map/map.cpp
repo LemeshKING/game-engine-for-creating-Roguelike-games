@@ -173,13 +173,12 @@ void mp::Map::FillMap()
 	for(int i = 3; i < Width; i++)
 		if((MapHeightValues[i - 3] == MapHeightValues[i]) && (MapHeightValues[i - 3] - MapHeightValues[i - 2] == 1) && (MapHeightValues[i] - MapHeightValues[i - 1] == 1))
 		{
-			//tmp.setPosition((i - 2) * 32, (Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
+
 			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object = new Thorns();
 			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setX((i - 2) * 32);
 			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setY((Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
-			//tmp.setPosition((i - 1) * 32, (Height - 2 -MapHeightValues[i - 1]) * 32 - 4);
+
 			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object = new Thorns();
-	/*		TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object->setSprite(tmp);*/
 			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setX((i - 1) * 32);
 			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setY((Height - 2 - MapHeightValues[i - 1]) * 32 - 4);
 		}
@@ -188,17 +187,14 @@ void mp::Map::FillMap()
 		{
 			
 			TileMap[Height - 1 - MapHeightValues[i - 3]][i - 3].Object = new Thorns();
-			//TileMap[Height - 1 - MapHeightValues[i - 2]][i - 3].Object->setSprite(tmp);
 			TileMap[Height - 1 - MapHeightValues[i - 3]][i - 3].Object->setX((i - 3) * 32);
 			TileMap[Height - 1 - MapHeightValues[i - 3]][i - 3].Object->setY((Height - 2 - MapHeightValues[i - 3]) * 32 - 4);
-			/*tmp.setPosition((i - 2) * 32, (Height - 2 - MapHeightValues[i - 2]) * 32 - 4);*/
+		
 			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object = new Thorns();
-			//TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setSprite(tmp);
 			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setX((i - 2) * 32);
 			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setY((Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
-			/*tmp.setPosition((i - 1) * 32, (Height - 2 - MapHeightValues[i - 1]) * 32 - 4);*/
+
 			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object = new Thorns();
-			//TileMap[Height - 1 - MapHeightValues[i - 2]][i - 1].Object->setSprite(tmp);
 			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setX((i - 1) * 32);
 			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setY((Height - 2 - MapHeightValues[i - 1]) * 32 - 4);
 		}
@@ -243,7 +239,7 @@ void mp::Map::GenerateMap()
 {
 	
 	srand(time(NULL));
-	seed = 1 + std::rand() % 10000;
+	//seed = 1 + std::rand() % 10000;
 	countEnemys = 60 + abs((int)pg::PerlinNoise1D(seed,persistence,countNoiseFunction)) % 71;
 	Enemys.resize(countEnemys);
 	TileMap.resize(Height);
@@ -301,7 +297,13 @@ void mp::Map::GenerateMap()
 			TileMap[Height - 1 - j][i].setSprite(tmp);
 			TileMap[Height - 1 - j][i].setType(3);
 		}
+	for (int i = 0; i < Height; i++)
+	{
+		TileMap[i][0].setType(1);
+		TileMap[i][Width - 1].setType(1);
+	}
 	FillMap();
+
 }
 
 unsigned int mp::Map::getHeight()

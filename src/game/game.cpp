@@ -6,6 +6,204 @@ Game::Game()
 
 }
 
+void Game::TestingProceduralGeneration(sf::RenderWindow& window)
+{	
+	mp::Map location2;
+	location2.setHeight(70);
+	location2.setWidth(250);
+	location2.setSeed(9928);
+	location2.setPersistence(3);
+	location2.setCountNoiseFunction(10);
+	location2.GenerateMap();
+	sf::Font font; 
+	font.loadFromFile("../src/arial/ttt.otf");
+	sf::Text text;
+	text.setFont(font);
+	text.setCharacterSize(210);
+	text.setFillColor(sf::Color::Black);
+	text.setString("seed this location: " + std::to_string(location.getSeed()));
+	text.setPosition(0,0);
+	sf::Text text2;
+	text2.setFont(font);
+	text2.setCharacterSize(210);
+	text2.setFillColor(sf::Color::Black);
+	text2.setString("seed this location: " + std::to_string(location2.getSeed()));
+	text2.setPosition(0,2200);
+	for(int i = 0; i < location2.getHeight(); i++)
+		for (int j = 0; j < location2.getWidth(); j++)
+			location2.TileMap[i][j].setY(i * 32 + 70 * 32);
+		
+	sf::View view;
+	view.reset(sf::FloatRect(0, 0, 8010, 4400));
+	std::cout << location.getSeed() << std::endl;
+	while (window.isOpen())
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			window.close();
+	
+		for(int i = 0; i < location.getHeight(); i++)
+			for(int j = 0; j < location.getWidth(); j++)
+				window.draw(location.TileMap[i][j].getSprite());
+		for (int i = 0; i < location.getHeight(); i++)
+			for (int j = 0; j < location.getWidth(); j++)
+				window.draw(location2.TileMap[i][j].getSprite());
+		window.draw(text);
+		window.draw(text2);
+		window.display();
+
+		window.setView(view);
+		
+		window.clear(sf::Color::White);
+	}
+	
+}
+
+void Game::TestingPlayerMove(sf::RenderWindow& window)
+{
+	sf::Clock clock;
+	sf::Clock clock2;
+	sf::View view;
+	view.reset(sf::FloatRect(0, 600, 960, 540));
+
+	window.setView(view);
+	clock.restart();
+	while (window.isOpen())
+	{	
+		float time = clock.getElapsedTime().asSeconds();
+		float timer = clock2.getElapsedTime().asMicroseconds();
+		timer /= 2000;
+		clock2.restart();
+		
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+
+		}
+		healthBar.setX(pl.getRect().left);
+		healthBar.setY(pl.getRect().top);
+		if (healthBar.getFullHealthBar().getSize().x > pl.getRect().left)
+			healthBar.setX(healthBar.getFullHealthBar().getSize().x);
+		else if (pl.getRect().left > (location.getWidth() - 17) * 32)
+			healthBar.setX((location.getWidth() - 17) * 32);
+		healthBar.update(pl.getHealth().getHealthPoints());
+		pl.update(timer, location.TypeOfTiles);
+		if(time < 3);
+		else if(time < 5)
+			pl.key["R"] = true;
+		else if(time < 8)
+		{
+			pl.key["Up"] = true;
+			pl.key["R"] = true;
+		}
+		else if(time < 10)
+		{
+			pl.key["Attack"] = true;
+		}
+		else if(time < 13)
+		{
+			pl.key["Attack"] = false;
+			pl.key["Dash"] = true;
+				
+		}
+		else if(time < 17)
+			pl.key["L"] = true;
+		else if(time < 20)
+			clock.restart();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			window.close();
+
+		for (int i = 0; i < location.getHeight(); i++)
+			for (int j = 0; j < location.getWidth(); j++)
+				window.draw(location.TileMap[i][j].getSprite());
+		if(pl.key["Attack"] && pl.animation.getAnimation().getFrame() >= 2)
+			window.draw(pl.getWeapon()->getSprite());
+		window.draw(pl.animation.getAnimation().getSprite());
+		window.draw(healthBar.getFullHealthBar());
+		window.draw(healthBar.getCurrentHealthBar());
+		window.draw(healthBar.getText());
+		window.display();
+		
+		window.clear(sf::Color::White);
+	}
+}
+
+void Game::TestingInterectionWithEnemy(sf::RenderWindow& window)
+{
+	sf::Clock clock2;
+	sf::View view;
+	view.reset(sf::FloatRect(0, 600, 960, 540));
+	Enemy enemy;
+	hlth::Health EnemyHealth;
+	EnemyHealth.setHealthPoints(100);
+	enemy.setHealth(EnemyHealth);
+	enemy.setCharacterHeight(50);
+	enemy.setCharacterWidth(40);
+	enemy.Initialization(5 *32, 25 * 32);
+	enemy.setDamageValue(10);
+	window.setView(view);
+	while (window.isOpen())
+	{
+		float timer = clock2.getElapsedTime().asMicroseconds();
+		enemy.setPlayerPosition(pl.getRect());
+		timer /= 2000;
+		clock2.restart();
+
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			window.close();
+		enemy.update(timer, location.TypeOfTiles);
+		for (int i = 0; i < location.getHeight(); i++)
+			for (int j = 0; j < location.getWidth(); j++)
+				window.draw(location.TileMap[i][j].getSprite());
+		if (pl.getRect().intersects(enemy.getRect()))
+			pl.TakeDamage(enemy.getDamageValue());
+		if (pl.key["Attack"] && pl.animation.getAnimation().getFrame() >= 2)
+			window.draw(pl.getWeapon()->getSprite());
+		window.draw(enemy.getRectangle());
+		healthBar.setX(pl.getRect().left);
+		healthBar.setY(pl.getRect().top);
+		if (healthBar.getFullHealthBar().getSize().x > pl.getRect().left)
+			healthBar.setX(healthBar.getFullHealthBar().getSize().x);
+		else if (pl.getRect().left > (location.getWidth() - 17) * 32)
+			healthBar.setX((location.getWidth() - 17) * 32);
+		healthBar.update(pl.getHealth().getHealthPoints());
+		window.draw(healthBar.getFullHealthBar());
+		window.draw(healthBar.getCurrentHealthBar());
+		window.draw(healthBar.getText());
+		if(pl.isAlive())
+		{
+			pl.update(timer, location.TypeOfTiles);
+			window.draw(pl.animation.getAnimation().getSprite());
+		
+		}
+		else
+		{
+			enemy.SawPlayer(false);
+			
+		}
+
+		
+		window.display();
+
+		window.clear(sf::Color::White);
+	}
+}
+
 void Game::Run(sf::RenderWindow &window)
 {
 	sf::View view;
@@ -16,9 +214,6 @@ void Game::Run(sf::RenderWindow &window)
 	int mouseY = h / 2;
 	srand(time(NULL));
 	int seed = 1 + std::rand() % 1000;
-	Enemy enemy;
-	enemy.Initialization(32, 0);
-	sf::RectangleShape rectangle(sf::Vector2f(32, 32));
 	bool isMouseButtonPresed = false;
 
 	window.setFramerateLimit(144);
@@ -60,35 +255,30 @@ void Game::Run(sf::RenderWindow &window)
 			
 			if (pl.isImmunity() && !pl.dashing)
 				frames++;
-
-			if(!pl.dashing)
+			pl.satDown = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
+			if(pl.canMove)
 			{
-				pl.satDown = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
-				if (!pl.satDown)
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 				{
+					pl.key["R"] = true;
+					if(pl.getCamera().getCenterX() >= (location.getWidth() - 15) * 32)
+						pl.getCamera().setCenterX((location.getWidth() - 15) * 32);
 
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-					{
-						pl.key["R"] = true;
-						if(pl.getCamera().getCenterX() >= (location.getWidth() - 15) * 32)
-							pl.getCamera().setCenterX((location.getWidth() - 15) * 32);
-
-					}
-					else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))	
-						pl.key["L"] = true;
+				}
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))	
+					pl.key["L"] = true;
 			
 					
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-					{
-						pl.key["Up"] = true;
-					}
-					if (pl.dashColdown > 77)
-					{
-						if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-							pl.key["Dash"] = true;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+					pl.key["Up"] = true;
+				
+				if (pl.dashColdown > 77)
+				{
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+						pl.key["Dash"] = true;
 
-					}
 				}
+				
 			}
 
 
@@ -123,7 +313,7 @@ void Game::Run(sf::RenderWindow &window)
 					}
 				}
 			raisingWeaponsFrames++;
-			pl.update(time,location.TypeOfTiles);
+			pl.update(5,location.TypeOfTiles);
 			healthBar.setX(pl.getRect().left);
 			healthBar.setY(pl.getRect().top);
 			if(healthBar.getFullHealthBar().getSize().x > pl.getRect().left)
@@ -131,7 +321,7 @@ void Game::Run(sf::RenderWindow &window)
 			else if(pl.getRect().left > (location.getWidth() - 17) * 32)
 				healthBar.setX((location.getWidth() - 17) * 32);
 			healthBar.update(pl.getHealth().getHealthPoints());
-			if(pl.animation.getAnimation().getFrame() >= 2 && pl.key["Attack"] == true)
+			if(pl.animation.getAnimation().getFrame() >= 2 && pl.key["Attack"])
 			{
 				window.draw(pl.getWeapon()->getSprite());
 				AttackFrames++;
@@ -153,7 +343,7 @@ void Game::Run(sf::RenderWindow &window)
 							if(pl.getRect().intersects(Enemys[i]->projectTile.getRect()))
 									pl.TakeDamage(Enemys[i]->projectTile.damageValue);
 						}
-						if (pl.animation.getAnimation().getFrame() >= 2 && pl.key["Attack"] == true && !Enemys[i]->wasAttaking)
+						if (pl.animation.getAnimation().getFrame() >= 2 && pl.key["Attack"] && !Enemys[i]->wasAttaking)
 							if(pl.getWeapon()->getRect().intersects(Enemys[i]->getRect()))
 							{
 								Enemys[i]->TakeDamage(pl.getWeapon()->getDamageValue());
@@ -180,10 +370,11 @@ void Game::Run(sf::RenderWindow &window)
 				for(auto i : Enemys)
 					i->wasAttaking = false;
 			}
-			weapon* Sword = pl.getWeapon();
-			sf::RectangleShape tmp = Sword->getRectangle();
+
+
 			window.draw(healthBar.getFullHealthBar());
 			window.draw(healthBar.getCurrentHealthBar());
+			window.draw(healthBar.getText());
 			window.draw(pl.animation.getAnimation().getSprite());
 			//window.draw(pl.getWeapon()->getRectangle());
 			//window.draw(pl.getRectangle());
@@ -212,29 +403,27 @@ void Game::Menu()
 
 void Game::Initialization()
 {
-	hlth::Health health;
-	health.setHealthPoints(100);
+	
+	
+
+	
+	location.setSeed(9928);
    location.setHeight(70);
    location.setWidth(250);
    location.setPersistence(3);
    location.setCountNoiseFunction(10);
    location.GenerateMap();
 	sword Sword;
-
+	hlth::Health health(150);
 	pl.setCharacterHeight(50);
 	pl.setCharacterWidth(32);
-	pl.Initialization(0,location.getStartPlayerPosition() * 32);
+	pl.Initialization(64,location.getStartPlayerPosition() * 32);
 	Sword.setRect(sf::FloatRect(pl.getRect().left + pl.getRect().width, pl.getRect().top,35,10));
-	Sword.setRectangle(sf::RectangleShape(sf::Vector2f(35,10)));
-	sf::RectangleShape tmp = Sword.getRectangle();
-	tmp.setFillColor(sf::Color::Blue);
-	tmp.setPosition(Sword.getRect().left, Sword.getRect().top);
-	Sword.setRectangle(tmp);
 	Sword.setDamageValue(34);
 	pl.setWeapon(&Sword);
 	pl.setHealth(health);
-	healthBar.Initialization(pl.getHealth().getMaxHealthPoints(),0, location.getStartPlayerPosition() + 7);
-	sf::RenderWindow window(sf::VideoMode(w, h), "Ray tracing", sf::Style::Fullscreen);
+	healthBar.Initialization(pl.getHealth().getMaxHealthPoints(), 0, location.getStartPlayerPosition() + 7);
+	sf::RenderWindow window(sf::VideoMode(w, h), "My first Game", sf::Style::Fullscreen);
 	Camera camera;
 	sf::View view;
 	
@@ -253,5 +442,7 @@ void Game::Initialization()
 
 	pl.setCamera(camera);
 	Run(window);
-
+	//TestingProceduralGeneration(window);
+	//TestingPlayerMove(window);
+	//TestingInterectionWithEnemy(window);
 }

@@ -38,7 +38,6 @@ void ProjectTile::update(const float time)
    }
    else
    {
-      std::cout << distance << std::endl;
       alive = false;
       distance = 0;
    }

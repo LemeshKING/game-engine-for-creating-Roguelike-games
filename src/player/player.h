@@ -22,12 +22,14 @@ class Player : public Character
    bool dashing = false;
    int dashFramers = 0;
    int dashColdown = 77;
+   bool canMove = true;
 protected:
    void ChangeStateCharacter() override;
 private:
-  
+  int immuneFrames = 0;
    weapon *Weapon;
    bool immunity = false;
+
    Camera camera;
    void CollisionX(std::vector<std::vector<int>>& location) override;
    void CollisionY(std::vector<std::vector<int>>& location) override;

@@ -18,6 +18,9 @@ private:
    Player pl;
 public:
    Game();
+   void TestingProceduralGeneration(sf::RenderWindow& window);
+   void TestingPlayerMove(sf::RenderWindow& window);
+   void TestingInterectionWithEnemy(sf::RenderWindow& window);
    void Run(sf::RenderWindow &window);
    void Pause();
    void Menu();

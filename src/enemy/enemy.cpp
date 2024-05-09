@@ -1,8 +1,9 @@
 #include "enemy.h"
 
-void Enemy::SawPlayer()
+void Enemy::SawPlayer(bool _sawPlayer)
 {
-   sawPlayer = true;
+   playerAlive = _sawPlayer;
+   sawPlayer = _sawPlayer;
 }
 
 void Enemy::Initialization(int x, int y)
@@ -19,7 +20,7 @@ void Enemy::Initialization(int x, int y)
 void Enemy::update(const float time, std::vector<std::vector<int>>& location)
 {
    dx = 0.15 * direction;
-   if(Vision.intersects(playerPosition) && !sawPlayer)
+   if(Vision.intersects(playerPosition) && !sawPlayer && playerAlive)
       sawPlayer = true;
    if(!sawPlayer)
    {  

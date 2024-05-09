@@ -31,26 +31,41 @@ void Player::update(const float time, std::vector<std::vector<int>>& location)
    if (CharacterState == attack) animation.setAnimation("attack");
    animation.flipAnimation(direction < 0);
    animation.tick(time);
-
+   onGround = false;
+   canMove = true;
+   if(immunity && !dashing)
+      immuneFrames++;
+   if (immuneFrames > 144)
+   {
+      immuneFrames = 0;
+      immunity = false;
+   }
    if(dashing)
-   {  
       dashFramers++;
+   if(dashing && dashFramers < 65)
+   {  
+
       dx = 0.4;
       BecomeImmune();
       dashColdown = 0;
+      canMove = false;
    }
    if(dashFramers >= 65 && dashing)
+      key["Dash"] = false;
+
+   
+   if (dashFramers > 100)
    {
       dashFramers = 0;
       dashing = false;
-      key["Dash"] = false;
       removeImmunity();
    }
    dashColdown++;
    if(satDown)
+   {
       rect.height = characterHeight / 1.35;
-
-   
+      canMove = false;
+   }
    else 
       rect.height = characterHeight;
 
@@ -59,9 +74,10 @@ void Player::update(const float time, std::vector<std::vector<int>>& location)
    rect.left += dx * time;
    CollisionX(location);
    if (!onGround) dy = dy + 0.005 * time;
-   if(dashing) dy = 0;
+   if(dashing && dashFramers < 65) dy = 0;
    rect.top += dy * time;
-   onGround = false;
+   CollisionY(location);
+   
    if(direction > 0)
    {
       sf::Sprite tmp = Weapon->getSprite();
@@ -76,7 +92,7 @@ void Player::update(const float time, std::vector<std::vector<int>>& location)
       Weapon->setSrite(tmp);
       Weapon->update(rect.left - Weapon->getRect().width + 3, rect.top);
    }
-   CollisionY(location);
+   
    rectangle.setSize(sf::Vector2f(rect.width,rect.height));
    rectangle.setPosition(rect.left, rect.top);
    animation.setPosition(rect.left,rect.top);
@@ -164,6 +180,7 @@ void Player::ChangeStateCharacter()
          {
             dy = -0.65;
             CharacterState = jumping;
+           
          }
       
    }
@@ -191,7 +208,7 @@ void Player::ChangeStateCharacter()
    if (!key["Attack"])
       if(CharacterState == attack)
          CharacterState = walk;
-   
+ 
 }
 
 

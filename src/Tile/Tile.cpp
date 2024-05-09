@@ -27,11 +27,13 @@ int Tile::getY()
 void Tile::setX(int _x)
 {
    x = _x;
+   sprite.setPosition(x,y);
 }
 
 void Tile::setY(int _y)
 {
    y = _y;
+   sprite.setPosition(x, y);
 }
 
 void Tile::setType(int _tileType)
