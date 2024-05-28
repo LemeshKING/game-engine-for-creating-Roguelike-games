@@ -1,5 +1,4 @@
 #include "ProjectTile.h"
-#include <iostream>
 
 ProjectTile::ProjectTile()
 {

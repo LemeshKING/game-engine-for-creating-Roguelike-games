@@ -23,10 +23,11 @@ class Player : public Character
    int dashFramers = 0;
    int dashColdown = 77;
    bool canMove = true;
+   int immuneFrames = 0;
 protected:
    void ChangeStateCharacter() override;
 private:
-  int immuneFrames = 0;
+ 
    weapon *Weapon;
    bool immunity = false;
 

@@ -174,7 +174,7 @@ void Game::TestingInterectionWithEnemy(sf::RenderWindow& window)
 			pl.TakeDamage(enemy.getDamageValue());
 		if (pl.key["Attack"] && pl.animation.getAnimation().getFrame() >= 2)
 			window.draw(pl.getWeapon()->getSprite());
-		window.draw(enemy.getRectangle());
+		window.draw(enemy.animation.getAnimation().getSprite());
 		healthBar.setX(pl.getRect().left);
 		healthBar.setY(pl.getRect().top);
 		if (healthBar.getFullHealthBar().getSize().x > pl.getRect().left)
@@ -234,8 +234,6 @@ void Game::Run(sf::RenderWindow &window)
 			}
 			float time = clock.getElapsedTime().asMicroseconds();
 			time /= 1300;
-			//std::cout << time << std::endl;
-			//std::cout << tmp1 << std::endl;
 			
 			clock.restart();
 ;
@@ -253,8 +251,7 @@ void Game::Run(sf::RenderWindow &window)
 					
 			}
 			
-			if (pl.isImmunity() && !pl.dashing)
-				frames++;
+
 			pl.satDown = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
 			if(pl.canMove)
 			{
@@ -350,7 +347,8 @@ void Game::Run(sf::RenderWindow &window)
 								Enemys[i]->wasAttaking = true;
 							}
 						Enemys[i]->update(time,location.TypeOfTiles);
-						window.draw(Enemys[i]->getRectangle());
+						window.draw(Enemys[i]->animation.getAnimation().getSprite());
+
 					}
 				}
 				else
@@ -376,8 +374,7 @@ void Game::Run(sf::RenderWindow &window)
 			window.draw(healthBar.getCurrentHealthBar());
 			window.draw(healthBar.getText());
 			window.draw(pl.animation.getAnimation().getSprite());
-			//window.draw(pl.getWeapon()->getRectangle());
-			//window.draw(pl.getRectangle());
+
 			window.display();
 			window.setView(pl.getCamera().getView());
 			window.clear(sf::Color::White);

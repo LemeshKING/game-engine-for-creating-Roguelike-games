@@ -13,12 +13,21 @@ void Enemy::Initialization(int x, int y)
    Vision = sf::FloatRect(x + characterWidth, y - characterHeight, 200, 200);
    rectangle.setSize(sf::Vector2f(rect.width,rect.height));
    rectangle.setPosition(sf::Vector2f(rect.left,rect.top));
-
+   if(!texture.loadFromFile("../src/enemy/enemy.png"))
+      texture.loadFromFile("../../src/enemy/enemy.png");
+   animation.setTexture(texture);
+   animation.CreateAnimation("walk",0,0,characterWidth,characterHeight,5,0.01);
+   animation.CreateAnimation("attack",0,50,characterWidth,characterHeight,5,0.0045);
+   CharacterState = walk;
    dx = 0.15;
 }
 
 void Enemy::update(const float time, std::vector<std::vector<int>>& location)
 {
+   if(CharacterState == walk) animation.setAnimation("walk");
+   if(CharacterState == attack) animation.setAnimation("attack");
+   animation.flipAnimation(direction < 0);
+   animation.tick(time);
    dx = 0.15 * direction;
    if(Vision.intersects(playerPosition) && !sawPlayer && playerAlive)
       sawPlayer = true;
@@ -40,23 +49,24 @@ void Enemy::update(const float time, std::vector<std::vector<int>>& location)
             direction = (playerPosition.left - rect.left) / abs(playerPosition.left - rect.left);
          }
          else 
-            attacking = true;
+            CharacterState = attack;
       else if (abs(playerPosition.left - rect.left) >  rect.width + 1) // rect.width >> atackRange;
       {
          direction = (playerPosition.left - rect.left) / abs(playerPosition.left - rect.left);
       }
       else
-         attacking = true;
+         CharacterState = attack;
    }
-
-   if (attacking)
+   if (CharacterState == attack && chardgeAttack == 0)
+      animation.setFrame(0);
+   if (CharacterState == attack)
    {
       dx = 0;
       chardgeAttack++;
       Attack();
    }
-   if(chardgeAttack > 144)
-      attackCooldown++;
+
+   
    rect.left += dx * time;
    Vision.left += dx * time;
    CollisionX(location);
@@ -66,6 +76,7 @@ void Enemy::update(const float time, std::vector<std::vector<int>>& location)
    onGround = false;
    CollisionY(location);
    rectangle.setPosition(rect.left, rect.top);
+   animation.setPosition(rect.left, rect.top);
    if (direction < 0)
       Vision.left = rect.left - Vision.width;
    else
@@ -154,5 +165,6 @@ void Enemy::Attack()
       dx = 0.25 * direction;
       attacking = false;
       chardgeAttack = 0;
+      CharacterState = walk;
    }
 }

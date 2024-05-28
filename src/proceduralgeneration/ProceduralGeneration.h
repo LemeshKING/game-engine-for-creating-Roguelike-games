@@ -11,6 +11,4 @@ namespace pg
    float PerlinNoise1D(float x, float persistence, int n);
    float SmoothedNoise(float x);
    float QuanticCurve(float x);
-
-
 }

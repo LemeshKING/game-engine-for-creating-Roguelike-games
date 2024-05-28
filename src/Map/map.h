@@ -47,8 +47,5 @@ namespace mp{
       void GenerateCaves();
       void SmoothCaves(std::vector<int> &Cave);
       void FillMap();
-      
-
-   
    };
 }

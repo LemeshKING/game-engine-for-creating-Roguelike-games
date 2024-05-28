@@ -192,30 +192,16 @@
 //		//	
 //		//}
 //		}
-#include <SFML/Graphics.hpp>
+
 #include <iostream>
-#include <random>
-#include "proceduralgeneration/ProceduralGeneration.h"
-#include "enemy/enemy.h"
-#include "player/player.h"
-#include "Map/map.h"
 #include "game/game.h"
-
-
-const int Height = 70;
-const int Width = 1000;
-
-std::vector<std::vector<int>> Tilemap(Height, std::vector<int>(Width));
-
 
 
 int main()
 {	
 	Game game;
 	game.Initialization();
-	mp::Map location;
-	
-	Enemy en;
+
 
 	//sf::View view;
 	//view.reset(sf::FloatRect(0, 0, 1920, 1080));
@@ -409,5 +395,5 @@ int main()
 	////	window.clear(sf::Color::White);
 	////}
 
-	return 0;
+   return 0;
 }

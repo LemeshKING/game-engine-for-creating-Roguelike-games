@@ -11,7 +11,7 @@ protected:
    sf::FloatRect playerPosition;
    int chardgeAttack = 0;
    int attackCooldown = 77;
-   int AttackRange = 33;
+   int AttackRange = 34;
    bool attacking = false;
    bool sawPlayer = false;
    void Enemy::CollisionX( std::vector<std::vector<int>>& location) override;
