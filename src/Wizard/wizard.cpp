@@ -2,6 +2,11 @@
 
 void Wizard::update(const float time, std::vector<std::vector<int>>& location)
 {
+   if (CharacterState == walk) animation.setAnimation("walk");
+   if (CharacterState == attack) animation.setAnimation("attack");
+   if (CharacterState == stay) animation.setAnimation("stay");
+   animation.flipAnimation(direction < 0);
+   animation.tick(time);
    dx = 0.1 * direction;
    if (Vision.intersects(playerPosition) && !sawPlayer)
       sawPlayer = true;
@@ -24,7 +29,10 @@ void Wizard::update(const float time, std::vector<std::vector<int>>& location)
             attacking = true;
       
       else if(projectTile.isAlive())
+      {
          dx = 0;
+         CharacterState = stay;
+      }
 
        
       
@@ -33,6 +41,7 @@ void Wizard::update(const float time, std::vector<std::vector<int>>& location)
 
    if (attacking)
    {
+      CharacterState = attack;
       dx = 0;
       chardgeAttack++;
       Attack();
@@ -48,6 +57,7 @@ void Wizard::update(const float time, std::vector<std::vector<int>>& location)
    onGround = false;
    CollisionY(location);
    rectangle.setPosition(rect.left, rect.top);
+   animation.setPosition(rect.left, rect.top);
    if (direction < 0)
       Vision.left = rect.left - Vision.width;
    else
@@ -62,14 +72,23 @@ void Wizard::Initialization(int x, int y)
    Vision = sf::FloatRect(x + characterWidth, y - characterHeight, 400, 400);
    rectangle.setSize(sf::Vector2f(rect.width, rect.height));
    rectangle.setPosition(sf::Vector2f(rect.left, rect.top));
-
+   if (!texture.loadFromFile("../src/enemy/enemy.png"))
+      texture.loadFromFile("../../src/enemy/enemy.png");
+   animation.setTexture(texture);
+   animation.CreateAnimation("walk", 0, 0, characterWidth, characterHeight, 5, 0.01);
+   animation.CreateAnimation("attack", 0, 50, characterWidth, characterHeight, 5, 0.0045);
+   animation.CreateAnimation("stay",0,0,characterWidth,characterHeight,1,0.0);
+   CharacterState = walk;
    dx = 0.1;
 }
 
 void Wizard::Attack()
 {
+   
    if (chardgeAttack > 144)
    {
+      if(!(rect.top - playerPosition.top))
+         directionAtack.y = 0;
       projectTile.Initialization(rect.left, rect.top);
       projectTile.setDirection(directionAtack);
       float length = sqrt((playerPosition.left + playerPosition.width / 2 - rect.left) * (playerPosition.left + playerPosition.width / 2 - rect.left) + (playerPosition.top + playerPosition.height / 2 - rect.top) * (playerPosition.top + playerPosition.height / 2 - rect.top));
@@ -82,5 +101,6 @@ void Wizard::Attack()
          projectTile.angel *= -1;
       attacking = false;
       chardgeAttack = 0;
+      CharacterState = walk;
    }
 }

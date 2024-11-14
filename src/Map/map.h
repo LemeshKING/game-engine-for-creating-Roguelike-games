@@ -10,7 +10,7 @@ namespace mp{
    class Map
    {
    private:
-      std::vector<Enemy*> Enemys;
+      std::vector<std::unique_ptr<Enemy>> _Enemys;
 
       int countEnemys;
       unsigned int seed = 0;
@@ -41,7 +41,7 @@ namespace mp{
       void setSeed(unsigned int _seed);
       unsigned int getSeed();
       int getStartPlayerPosition();
-      std::vector<Enemy*> getEnemys();
+      void getEnemys(std::vector<std::unique_ptr<Enemy>> &Enemys);
    private: 
       void smoothMap();
       void GenerateCaves();

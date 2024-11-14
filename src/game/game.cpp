@@ -9,33 +9,40 @@ Game::Game()
 void Game::TestingProceduralGeneration(sf::RenderWindow& window)
 {	
 	mp::Map location2;
+
 	location2.setHeight(70);
 	location2.setWidth(250);
 	location2.setSeed(9928);
 	location2.setPersistence(3);
 	location2.setCountNoiseFunction(10);
 	location2.GenerateMap();
+
 	sf::Font font; 
 	font.loadFromFile("../src/arial/ttt.otf");
+
 	sf::Text text;
 	text.setFont(font);
 	text.setCharacterSize(210);
 	text.setFillColor(sf::Color::Black);
 	text.setString("seed this location: " + std::to_string(location.getSeed()));
 	text.setPosition(0,0);
+
 	sf::Text text2;
 	text2.setFont(font);
 	text2.setCharacterSize(210);
 	text2.setFillColor(sf::Color::Black);
 	text2.setString("seed this location: " + std::to_string(location2.getSeed()));
 	text2.setPosition(0,2200);
+
 	for(int i = 0; i < location2.getHeight(); i++)
 		for (int j = 0; j < location2.getWidth(); j++)
 			location2.TileMap[i][j].setY(i * 32 + 70 * 32);
 		
 	sf::View view;
 	view.reset(sf::FloatRect(0, 0, 8010, 4400));
+
 	std::cout << location.getSeed() << std::endl;
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -51,9 +58,11 @@ void Game::TestingProceduralGeneration(sf::RenderWindow& window)
 		for(int i = 0; i < location.getHeight(); i++)
 			for(int j = 0; j < location.getWidth(); j++)
 				window.draw(location.TileMap[i][j].getSprite());
+
 		for (int i = 0; i < location.getHeight(); i++)
 			for (int j = 0; j < location.getWidth(); j++)
 				window.draw(location2.TileMap[i][j].getSprite());
+
 		window.draw(text);
 		window.draw(text2);
 		window.display();
@@ -353,7 +362,7 @@ void Game::Run(sf::RenderWindow &window)
 				}
 				else
 				{
-					delete Enemys[i];
+					Enemys[i].reset();
 					Enemys.erase(Enemys.begin() + i);
 				}
 			}
@@ -365,8 +374,8 @@ void Game::Run(sf::RenderWindow &window)
 				isMouseButtonPresed = false;
 				pl.key["Attack"] = false;
 				pl.animation.setFrame(0);
-				for(auto i : Enemys)
-					i->wasAttaking = false;
+				for(int i = 0; i < Enemys.size(); i++)
+					Enemys[i]->wasAttaking = false;
 			}
 
 
@@ -431,7 +440,7 @@ void Game::Initialization()
 	camera.setViewMode(sf::Vector2u(w/2,h/2));
 	camera.setCenterX(w / 4);
 	camera.setCenterY(h / 4 + 32);
-	Enemys = location.getEnemys();
+	location.getEnemys(Enemys);
 	if(Enemys.size() > location.currentEnemy)
 		Enemys.resize(location.currentEnemy);
 	std::cout << location.tryRnd << std::endl;

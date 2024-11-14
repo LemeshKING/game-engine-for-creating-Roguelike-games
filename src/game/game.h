@@ -14,7 +14,7 @@ private:
    int mouseY = h / 2;
    HealthBar healthBar;
    mp::Map location;
-   std::vector<Enemy*> Enemys;
+   std::vector<std::unique_ptr<Enemy>> Enemys;
    Player pl;
 public:
    Game();

@@ -120,15 +120,14 @@ void mp::Map::GenerateCaves()
 					health.setHealthPoints(100);
 					int TypeEnemy = abs((int)pg::PerlinNoise1D(i * seed * currentEnemy, persistence, countNoiseFunction)) % 100;
 					if (TypeEnemy < 70)
-						Enemys[currentEnemy] = new Enemy();
+						_Enemys[currentEnemy] = std::make_unique<Enemy>();
 					else
-						Enemys[currentEnemy] = new Wizard();
-					Enemys[currentEnemy]->setHealth(health);
-					Enemys[currentEnemy]->setCharacterHeight(50);
-					Enemys[currentEnemy]->setCharacterHeight(50);
-					Enemys[currentEnemy]->setCharacterWidth(40);
-					Enemys[currentEnemy]->setDamageValue(10);
-					Enemys[currentEnemy]->Initialization((i + rndMapPoints[k]) * 32, (Height - CavesHeight[i] - 3) * 32);
+						_Enemys[currentEnemy] = std::make_unique<Wizard>();
+					_Enemys[currentEnemy]->setHealth(health);
+					_Enemys[currentEnemy]->setCharacterHeight(50);
+					_Enemys[currentEnemy]->setCharacterWidth(40);
+					_Enemys[currentEnemy]->setDamageValue(10);
+					_Enemys[currentEnemy]->Initialization((i + rndMapPoints[k]) * 32, (Height - CavesHeight[i] - 3) * 32);
 					currentEnemy++;
 				}
 			}
@@ -209,15 +208,14 @@ void mp::Map::FillMap()
 				health.setHealthPoints(100);
 				int TypeEnemy = abs((int)pg::PerlinNoise1D(i * seed + currentEnemy, persistence, countNoiseFunction)) % 100;
 				if(TypeEnemy < 70)
-					Enemys[currentEnemy] = new Enemy();
+					_Enemys[currentEnemy] = std::make_unique<Enemy>();
 				else 
-					Enemys[currentEnemy] = new Wizard();
-				Enemys[currentEnemy]->setHealth(health);
-				Enemys[currentEnemy]->setCharacterHeight(50);
-				Enemys[currentEnemy]->setCharacterWidth(40);
-				Enemys[currentEnemy]->setDamageValue(10);
-				Enemys[currentEnemy]->Initialization(i * 32, (Height - MapHeightValues[i] - 3) * 32);
-				Enemys[currentEnemy];
+					_Enemys[currentEnemy] = std::make_unique<Wizard>();
+				_Enemys[currentEnemy]->setHealth(health);
+				_Enemys[currentEnemy]->setCharacterHeight(50);
+				_Enemys[currentEnemy]->setCharacterWidth(40);
+				_Enemys[currentEnemy]->setDamageValue(10);
+				_Enemys[currentEnemy]->Initialization(i * 32, (Height - MapHeightValues[i] - 3) * 32);
 				currentEnemy++;
 			}
 		}
@@ -229,9 +227,9 @@ void mp::Map::FillMap()
 			TypeOfTiles[i][j] = TileMap[i][j].getTileType();
 }
 
-std::vector<Enemy*> mp::Map::getEnemys()
+void mp::Map::getEnemys(std::vector<std::unique_ptr<Enemy>>& Enemys)
 {
-	return Enemys;
+	Enemys = std::move(_Enemys);
 }
 
 
@@ -241,7 +239,7 @@ void mp::Map::GenerateMap()
 	srand(time(NULL));
 	//seed = 1 + std::rand() % 10000;
 	countEnemys = 60 + abs((int)pg::PerlinNoise1D(seed,persistence,countNoiseFunction)) % 71;
-	Enemys.resize(countEnemys);
+	_Enemys.resize(countEnemys);
 	TileMap.resize(Height);
 	TypeOfTiles.resize(Height);
 	sf::Sprite tmp;
