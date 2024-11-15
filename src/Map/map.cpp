@@ -116,17 +116,13 @@ void mp::Map::GenerateCaves()
 				int isSpawnEnemy = abs((int)pg::PerlinNoise1D(i * seed, persistence,countNoiseFunction)) % 100;
 				if (isSpawnEnemy > 70)
 				{
-					hlth::Health health;
-					health.setHealthPoints(100);
 					int TypeEnemy = abs((int)pg::PerlinNoise1D(i * seed * currentEnemy, persistence, countNoiseFunction)) % 100;
+
 					if (TypeEnemy < 70)
-						_Enemys[currentEnemy] = std::make_unique<Enemy>();
+						creatorEnemys = std::make_unique<ZombieCreator>();
 					else
-						_Enemys[currentEnemy] = std::make_unique<Wizard>();
-					_Enemys[currentEnemy]->setHealth(health);
-					_Enemys[currentEnemy]->setCharacterHeight(50);
-					_Enemys[currentEnemy]->setCharacterWidth(40);
-					_Enemys[currentEnemy]->setDamageValue(10);
+						creatorEnemys = std::make_unique<WizardCreator>();
+					_Enemys[currentEnemy] = creatorEnemys->factoryMethod();
 					_Enemys[currentEnemy]->Initialization((i + rndMapPoints[k]) * 32, (Height - CavesHeight[i] - 3) * 32);
 					currentEnemy++;
 				}
@@ -204,17 +200,14 @@ void mp::Map::FillMap()
 			int isSpawnEnemy = abs((int)pg::PerlinNoise1D(i * seed, persistence, countNoiseFunction)) % 100;
 			if (isSpawnEnemy > 70)
 			{
-				hlth::Health health;
-				health.setHealthPoints(100);
 				int TypeEnemy = abs((int)pg::PerlinNoise1D(i * seed + currentEnemy, persistence, countNoiseFunction)) % 100;
+
 				if(TypeEnemy < 70)
-					_Enemys[currentEnemy] = std::make_unique<Enemy>();
+					creatorEnemys = std::make_unique<ZombieCreator>();
 				else 
-					_Enemys[currentEnemy] = std::make_unique<Wizard>();
-				_Enemys[currentEnemy]->setHealth(health);
-				_Enemys[currentEnemy]->setCharacterHeight(50);
-				_Enemys[currentEnemy]->setCharacterWidth(40);
-				_Enemys[currentEnemy]->setDamageValue(10);
+					creatorEnemys = std::make_unique<WizardCreator>();
+				
+				_Enemys[currentEnemy] = creatorEnemys->factoryMethod();
 				_Enemys[currentEnemy]->Initialization(i * 32, (Height - MapHeightValues[i] - 3) * 32);
 				currentEnemy++;
 			}
@@ -237,7 +230,7 @@ void mp::Map::GenerateMap()
 {
 	
 	srand(time(NULL));
-	//seed = 1 + std::rand() % 10000;
+	seed = 1 + std::rand() % 10000;
 	countEnemys = 60 + abs((int)pg::PerlinNoise1D(seed,persistence,countNoiseFunction)) % 71;
 	_Enemys.resize(countEnemys);
 	TileMap.resize(Height);

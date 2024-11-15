@@ -22,6 +22,7 @@ void Wizard::update(const float time, IntVectorVector& location)
    }
    else
    {
+      CharacterState = walk;
       direction = (playerPosition.left - rect.left) / abs(playerPosition.left - rect.left);
       directionAtack.x = (playerPosition.left /*+ playerPosition.width / 2*/ - rect.left) / abs(rect.left - playerPosition.left /*- playerPosition.width / 2*/);
       directionAtack.y = (playerPosition.top + playerPosition.height / 2 - rect.top) / abs(rect.top - playerPosition.top - playerPosition.height / 2);
@@ -99,6 +100,5 @@ void Wizard::Attack()
          projectTile.angel *= -1;
       attacking = false;
       chardgeAttack = 0;
-      CharacterState = walk;
    }
 }

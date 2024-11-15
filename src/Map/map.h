@@ -1,23 +1,23 @@
 #pragma once
 #include "../proceduralgeneration/ProceduralGeneration.h"
 #include "../Tile/Tile.h"
-#include "../Wizard/wizard.h"
 #include "../thorns/thorns.h"
 #include "../teleport/teleport.h"
 #include "../sword/sword.h"
+#include "EnemyCreator.h"
 #include <random>
 
 typedef std::vector<int> IntVector;
 typedef std::vector<IntVector> IntVectorVector;
-typedef std::unique_ptr<Enemy> UPtrEnemy;
 typedef std::vector<UPtrEnemy> UPtrEnemyVector;
+typedef std::unique_ptr<EnemyCreator> UPtrEnemyCreator;
 
 namespace mp{
    class Map
    {
    private:
       UPtrEnemyVector _Enemys;
-
+      UPtrEnemyCreator creatorEnemys;
       int countEnemys;
       unsigned int seed = 0;
       unsigned int Height = 0, Width = 0;

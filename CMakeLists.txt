@@ -42,7 +42,11 @@ set(SOURCES_FILES src/main.cpp
 	src/HealthBar/HealthBar.h
 	src/HealthBar/HealthBar.cpp
 	src/Animation/Animation.h
-	src/Animation/Animation.cpp)
+	src/Animation/Animation.cpp
+	src/Map/EnemyCreator.h
+	src/Map/EnemyCreator.cpp
+	src/Ghoul/Ghoul.h
+	src/Ghoul/Ghoul.cpp)
 	
 project(${PROJECT_NAME})
 
