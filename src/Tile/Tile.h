@@ -1,7 +1,6 @@
 #pragma once
 #include "../GameObject/GameObject.h"
 
-
 class Tile
 {
 private:
@@ -13,7 +12,7 @@ private:
    int tileType;
 public:
    GameObject *Object;
-   weapon* Weapon;
+   SPtrWeapon Weapon;
    sf::Sprite getSprite();
    void setSprite(sf::Sprite _sprite);
    int getX();

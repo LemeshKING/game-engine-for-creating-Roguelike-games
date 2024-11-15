@@ -3,21 +3,23 @@
 #include "../Camera/Camera.h"
 #include "../Weapon/weapon.h"
 
+typedef std::shared_ptr<weapon> SPtrWeapon;
+
 class Player : public Character
 {
  public: 
 
    Player();
    void Initialization(int x, int y);
-   void update(const float time, std::vector<std::vector<int>>& location) override;
+   void update(const float time, IntVectorVector& location) override;
    void setCamera(Camera &_camera);
    Camera getCamera();
    void TakeDamage(int damageValue) override;
    bool isImmunity();
    void removeImmunity();
-   void setWeapon(weapon *_weapon);
+   void setWeapon(SPtrWeapon &_weapon);
    void BecomeImmune();
-   weapon* getWeapon();
+   SPtrWeapon getWeapon();
    bool satDown = false;
    bool dashing = false;
    int dashFramers = 0;
@@ -28,10 +30,10 @@ protected:
    void ChangeStateCharacter() override;
 private:
  
-   weapon *Weapon;
+   SPtrWeapon Weapon;
    bool immunity = false;
 
    Camera camera;
-   void CollisionX(std::vector<std::vector<int>>& location) override;
-   void CollisionY(std::vector<std::vector<int>>& location) override;
+   void CollisionX(IntVectorVector& location) override;
+   void CollisionY(IntVectorVector& location) override;
 };

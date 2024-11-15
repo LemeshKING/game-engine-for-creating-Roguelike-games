@@ -1,6 +1,6 @@
 #include "wizard.h"
 
-void Wizard::update(const float time, std::vector<std::vector<int>>& location)
+void Wizard::update(const float time, IntVectorVector& location)
 {
    if (CharacterState == walk) animation.setAnimation("walk");
    if (CharacterState == attack) animation.setAnimation("attack");
@@ -24,7 +24,7 @@ void Wizard::update(const float time, std::vector<std::vector<int>>& location)
    {
       direction = (playerPosition.left - rect.left) / abs(playerPosition.left - rect.left);
       directionAtack.x = (playerPosition.left /*+ playerPosition.width / 2*/ - rect.left) / abs(rect.left - playerPosition.left /*- playerPosition.width / 2*/);
-      directionAtack.y = (playerPosition.top + /*playerPosition.height / 2*/ - rect.top) / abs(rect.top - playerPosition.top /*- playerPosition.height / 2*/);
+      directionAtack.y = (playerPosition.top + playerPosition.height / 2 - rect.top) / abs(rect.top - playerPosition.top - playerPosition.height / 2);
       if (abs(playerPosition.left - rect.left) < AttackRange && !projectTile.isAlive())
             attacking = true;
       
@@ -87,8 +87,6 @@ void Wizard::Attack()
    
    if (chardgeAttack > 144)
    {
-      if(!(rect.top - playerPosition.top))
-         directionAtack.y = 0;
       projectTile.Initialization(rect.left, rect.top);
       projectTile.setDirection(directionAtack);
       float length = sqrt((playerPosition.left + playerPosition.width / 2 - rect.left) * (playerPosition.left + playerPosition.width / 2 - rect.left) + (playerPosition.top + playerPosition.height / 2 - rect.top) * (playerPosition.top + playerPosition.height / 2 - rect.top));

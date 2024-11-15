@@ -138,7 +138,7 @@ void mp::Map::GenerateCaves()
 		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object = new Teleport(rndMapPoints[k] * 32, (Height - CavesHeight[0] - 2) * 32);
 		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object->setX((rndMapPoints[k] + CavesWidth - 3) * 32);
 		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object->setY((Height - CavesHeight[CavesWidth - 2] - 2) * 32 - 64);
-		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon = new sword();
+		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon = std::make_shared <sword>();
 		tmp1 = TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->getSprite();
 		tmp1.setPosition((rndMapPoints[k] + CavesWidth - 5) * 32, (Height - CavesHeight[CavesWidth - 5] - 2) * 32);
 		tmp1.setRotation(45);
@@ -152,7 +152,7 @@ void mp::Map::GenerateCaves()
 
 }
 
-void mp::Map::SmoothCaves(std::vector<int>& Cave)
+void mp::Map::SmoothCaves(IntVector& Cave)
 {
 	for (int i = 1; i < Cave.size(); i++)
 	{
@@ -227,9 +227,9 @@ void mp::Map::FillMap()
 			TypeOfTiles[i][j] = TileMap[i][j].getTileType();
 }
 
-void mp::Map::getEnemys(std::vector<std::unique_ptr<Enemy>>& Enemys)
+UPtrEnemyVector mp::Map::getEnemys()
 {
-	Enemys = std::move(_Enemys);
+	return std::move(_Enemys);
 }
 
 

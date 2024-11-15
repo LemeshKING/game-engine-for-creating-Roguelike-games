@@ -4,7 +4,7 @@ Character::Character()
 {
 }
 
-void Character::update(const float time, std::vector<std::vector<int>>& location)
+void Character::update(const float time, IntVectorVector& location)
 {
    rect.left += dx * time;
    CollisionX(location);
@@ -121,7 +121,7 @@ int Character::getDirection()
 
 
 
-void Character::CollisionX(std::vector<std::vector<int>>& location)
+void Character::CollisionX(IntVectorVector& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
@@ -133,7 +133,7 @@ void Character::CollisionX(std::vector<std::vector<int>>& location)
 }
 
 
-void Character::CollisionY(std::vector<std::vector<int>>& location)
+void Character::CollisionY(IntVectorVector& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)

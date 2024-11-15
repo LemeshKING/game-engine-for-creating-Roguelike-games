@@ -6,11 +6,17 @@
 #include "../teleport/teleport.h"
 #include "../sword/sword.h"
 #include <random>
+
+typedef std::vector<int> IntVector;
+typedef std::vector<IntVector> IntVectorVector;
+typedef std::unique_ptr<Enemy> UPtrEnemy;
+typedef std::vector<UPtrEnemy> UPtrEnemyVector;
+
 namespace mp{
    class Map
    {
    private:
-      std::vector<std::unique_ptr<Enemy>> _Enemys;
+      UPtrEnemyVector _Enemys;
 
       int countEnemys;
       unsigned int seed = 0;
@@ -25,12 +31,12 @@ namespace mp{
       int CavesWidth = 0;
       bool canGenerateCave = true;
       int randomMapPoint;
-      std::vector<int> rndMapPoints;
+      IntVector rndMapPoints;
    public:
-      std::vector<std::vector<int>> TypeOfTiles;
+      IntVectorVector TypeOfTiles;
       int tryRnd = 0;
       std::vector<std::vector<Tile>> TileMap;
-      std::vector<int> MapHeightValues;
+      IntVector MapHeightValues;
       void GenerateMap();
       unsigned int getHeight();
       unsigned int getWidth();
@@ -41,11 +47,11 @@ namespace mp{
       void setSeed(unsigned int _seed);
       unsigned int getSeed();
       int getStartPlayerPosition();
-      void getEnemys(std::vector<std::unique_ptr<Enemy>> &Enemys);
+      UPtrEnemyVector getEnemys();
    private: 
       void smoothMap();
       void GenerateCaves();
-      void SmoothCaves(std::vector<int> &Cave);
+      void SmoothCaves(IntVector &Cave);
       void FillMap();
    };
 }

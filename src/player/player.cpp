@@ -22,7 +22,7 @@ void Player::Initialization(int x, int y)
    animation.CreateAnimation("attack",0,150,characterWidth,characterHeight,5,0.022);
 }
 
-void Player::update(const float time, std::vector<std::vector<int>>& location)
+void Player::update(const float time, IntVectorVector& location)
 {
    ChangeStateCharacter();
    if (CharacterState == stay) animation.setAnimation("stay");
@@ -142,7 +142,7 @@ void Player::removeImmunity()
    immunity = false;
 }
 
-void Player::setWeapon(weapon *_weapon)
+void Player::setWeapon(SPtrWeapon &_weapon)
 {
    Weapon = _weapon;
 }
@@ -152,7 +152,7 @@ void Player::BecomeImmune()
    immunity = true;
 }
 
-weapon* Player::getWeapon()
+SPtrWeapon Player::getWeapon()
 {
    return Weapon;
 }
@@ -213,7 +213,7 @@ void Player::ChangeStateCharacter()
 
 
 
-void Player::CollisionX(std::vector<std::vector<int>>& location)
+void Player::CollisionX(IntVectorVector& location)
 {
    for(int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for(int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
@@ -225,7 +225,7 @@ void Player::CollisionX(std::vector<std::vector<int>>& location)
             
 }
 
-void Player::CollisionY(std::vector<std::vector<int>>& location)
+void Player::CollisionY(IntVectorVector& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)

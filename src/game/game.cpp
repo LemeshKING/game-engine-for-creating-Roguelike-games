@@ -201,10 +201,9 @@ void Game::TestingInterectionWithEnemy(sf::RenderWindow& window)
 		
 		}
 		else
-		{
 			enemy.SawPlayer(false);
-			
-		}
+		
+		
 
 		
 		window.display();
@@ -307,7 +306,7 @@ void Game::Run(sf::RenderWindow &window)
 						if (pl.getRect().intersects(location.TileMap[i][j].Weapon->getRect()))
 							if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && raisingWeaponsFrames > 77)
 							{
-								weapon* tmp = pl.getWeapon();
+								SPtrWeapon tmp = pl.getWeapon();
 								tmp->setRotation(45);
 								location.TileMap[i][j].Weapon->setRotation(0);
 								pl.setWeapon(location.TileMap[i][j].Weapon);
@@ -419,14 +418,14 @@ void Game::Initialization()
    location.setPersistence(3);
    location.setCountNoiseFunction(10);
    location.GenerateMap();
-	sword Sword;
+	SPtrWeapon Sword = std::make_shared<sword>();
 	hlth::Health health(150);
 	pl.setCharacterHeight(50);
 	pl.setCharacterWidth(32);
 	pl.Initialization(64,location.getStartPlayerPosition() * 32);
-	Sword.setRect(sf::FloatRect(pl.getRect().left + pl.getRect().width, pl.getRect().top,35,10));
-	Sword.setDamageValue(34);
-	pl.setWeapon(&Sword);
+	Sword->setRect(sf::FloatRect(pl.getRect().left + pl.getRect().width, pl.getRect().top,35,10));
+	Sword->setDamageValue(34);
+	pl.setWeapon(Sword);
 	pl.setHealth(health);
 	healthBar.Initialization(pl.getHealth().getMaxHealthPoints(), 0, location.getStartPlayerPosition() + 7);
 	sf::RenderWindow window(sf::VideoMode(w, h), "My first Game", sf::Style::Fullscreen);
@@ -440,7 +439,7 @@ void Game::Initialization()
 	camera.setViewMode(sf::Vector2u(w/2,h/2));
 	camera.setCenterX(w / 4);
 	camera.setCenterY(h / 4 + 32);
-	location.getEnemys(Enemys);
+	Enemys = location.getEnemys();
 	if(Enemys.size() > location.currentEnemy)
 		Enemys.resize(location.currentEnemy);
 	std::cout << location.tryRnd << std::endl;

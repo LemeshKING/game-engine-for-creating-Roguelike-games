@@ -22,7 +22,7 @@ void Enemy::Initialization(int x, int y)
    dx = 0.15;
 }
 
-void Enemy::update(const float time, std::vector<std::vector<int>>& location)
+void Enemy::update(const float time, IntVectorVector& location)
 {
    if(CharacterState == walk) animation.setAnimation("walk");
    if(CharacterState == attack) animation.setAnimation("attack");
@@ -109,7 +109,7 @@ void Enemy::setPlayerPosition(sf::FloatRect _PlayerPosition)
    playerPosition = _PlayerPosition;
 }
 
-void Enemy::CollisionX(std::vector<std::vector<int>>& location)
+void Enemy::CollisionX(IntVectorVector& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
@@ -128,7 +128,7 @@ void Enemy::CollisionX(std::vector<std::vector<int>>& location)
 }
 
 
-void Enemy::CollisionY( std::vector<std::vector<int>>& location)
+void Enemy::CollisionY(IntVectorVector& location)
 {
    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
       for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)

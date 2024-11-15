@@ -2,6 +2,8 @@
 #include"../Health/health.h"
 #include"../AnimationManager/AnimationManager.h"
 
+typedef std::vector<int> IntVector;
+typedef std::vector<IntVector> IntVectorVector;
 
 class Character
 {
@@ -12,7 +14,7 @@ class Character
 
 
    Character();
-   virtual void update(const float time, std::vector<std::vector<int>> &location);
+   virtual void update(const float time, IntVectorVector &location);
    void setDirection(int _direction);
    void setDx(float _dx);
    void setDy(float _dy);
@@ -34,8 +36,8 @@ class Character
    float getDy();
    int getDirection();
  private:
-   virtual void CollisionX(std::vector<std::vector<int>>& location);
-   virtual void CollisionY(std::vector<std::vector<int>>& location);
+   virtual void CollisionX(IntVectorVector& location);
+   virtual void CollisionY(IntVectorVector& location);
  protected: 
    enum State{ stay, walk, jumping, attack } CharacterState;
    hlth::Health health;

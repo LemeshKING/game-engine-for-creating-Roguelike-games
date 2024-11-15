@@ -11,7 +11,7 @@ public:
       attackCooldown = 70;
    }
 
-   void update(const float time, std::vector<std::vector<int>>& location) override;
+   void update(const float time, IntVectorVector& location) override;
    void Initialization(int x, int y) override;
    void Attack() override;
 private:
