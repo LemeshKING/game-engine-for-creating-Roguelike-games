@@ -131,9 +131,9 @@ void mp::Map::GenerateCaves()
 				break;
 		}
 		sf::Sprite tmp1;
-		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object = new Teleport(rndMapPoints[k] * 32, (Height - CavesHeight[0] - 2) * 32);
-		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object->setX((rndMapPoints[k] + CavesWidth - 3) * 32);
-		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object->setY((Height - CavesHeight[CavesWidth - 2] - 2) * 32 - 64);
+		creatorGameObjects = std::make_unique<TeleportCreator>();
+		IntVector tmp2 { rndMapPoints[k] * 32 ,(int)(Height - CavesHeight[0] - 2) * 32, (rndMapPoints[k] + CavesWidth - 3) * 32, (int)(Height - CavesHeight[CavesWidth - 2] - 2) * 32 - 64 };
+		TileMap[Height - CavesHeight[CavesWidth - 3] - 1][rndMapPoints[k] + CavesWidth - 3].Object = creatorGameObjects->factoryMethod(tmp2);
 		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon = std::make_shared <sword>();
 		tmp1 = TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->getSprite();
 		tmp1.setPosition((rndMapPoints[k] + CavesWidth - 5) * 32, (Height - CavesHeight[CavesWidth - 5] - 2) * 32);
@@ -164,34 +164,36 @@ void mp::Map::SmoothCaves(IntVector& Cave)
 
 void mp::Map::FillMap()
 {
-
+	creatorGameObjects = std::make_unique<ThornsCreator>();
 	for(int i = 3; i < Width; i++)
 		if((MapHeightValues[i - 3] == MapHeightValues[i]) && (MapHeightValues[i - 3] - MapHeightValues[i - 2] == 1) && (MapHeightValues[i] - MapHeightValues[i - 1] == 1))
 		{
+			IntVector tmp { (i - 2) * 32 , (int)(Height - 2 - MapHeightValues[i - 2]) * 32 - 4 };
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object = creatorGameObjects->factoryMethod(tmp);
 
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object = new Thorns();
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setX((i - 2) * 32);
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setY((Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
 
-			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object = new Thorns();
-			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setX((i - 1) * 32);
-			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setY((Height - 2 - MapHeightValues[i - 1]) * 32 - 4);
+			tmp[0] = (i - 1) * 32;
+			tmp[1] = (Height - 2 - MapHeightValues[i - 1]) * 32 - 4;
+			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object = creatorGameObjects->factoryMethod(tmp);
+
 		}
 	for (int i = 4; i < Width; i++)
 		if ((MapHeightValues[i - 4] == MapHeightValues[i]) && MapHeightValues[i - 4] - MapHeightValues[i - 3] == 1 && MapHeightValues[i] - MapHeightValues[i - 1] == 1)
 		{
-			
-			TileMap[Height - 1 - MapHeightValues[i - 3]][i - 3].Object = new Thorns();
-			TileMap[Height - 1 - MapHeightValues[i - 3]][i - 3].Object->setX((i - 3) * 32);
-			TileMap[Height - 1 - MapHeightValues[i - 3]][i - 3].Object->setY((Height - 2 - MapHeightValues[i - 3]) * 32 - 4);
-		
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object = new Thorns();
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setX((i - 2) * 32);
-			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object->setY((Height - 2 - MapHeightValues[i - 2]) * 32 - 4);
+			IntVector tmp{ (i - 3) * 32 , (int)(Height - 2 - MapHeightValues[i - 3]) * 32 - 4 };
+			TileMap[Height - 1 - MapHeightValues[i - 3]][i - 3].Object = creatorGameObjects->factoryMethod(tmp);
 
-			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object = new Thorns();
-			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setX((i - 1) * 32);
-			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object->setY((Height - 2 - MapHeightValues[i - 1]) * 32 - 4);
+		
+
+			tmp[0] = (i - 2) * 32;
+			tmp[1] = (Height - 2 - MapHeightValues[i - 2]) * 32 - 4;
+			TileMap[Height - 1 - MapHeightValues[i - 2]][i - 2].Object = creatorGameObjects->factoryMethod(tmp);
+
+
+			tmp[0] = (i - 1) * 32;
+			tmp[1] = (Height - 2 - MapHeightValues[i - 1]) * 32 - 4;
+			TileMap[Height - 1 - MapHeightValues[i - 1]][i - 1].Object = creatorGameObjects->factoryMethod(tmp);
+
 		}
 	for (int i = 30; i < Width - 20; i++)
 	{

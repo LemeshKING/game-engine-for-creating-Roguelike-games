@@ -1,16 +1,15 @@
 #pragma once
 #include "../proceduralgeneration/ProceduralGeneration.h"
 #include "../Tile/Tile.h"
-#include "../thorns/thorns.h"
-#include "../teleport/teleport.h"
 #include "../sword/sword.h"
 #include "EnemyCreator.h"
+#include "GameObjectCreator.h"
 #include <random>
 
-typedef std::vector<int> IntVector;
 typedef std::vector<IntVector> IntVectorVector;
 typedef std::vector<UPtrEnemy> UPtrEnemyVector;
 typedef std::unique_ptr<EnemyCreator> UPtrEnemyCreator;
+typedef std::unique_ptr<GameObjectCreator> UPtrGameObjectCreator;
 
 namespace mp{
    class Map
@@ -18,6 +17,7 @@ namespace mp{
    private:
       UPtrEnemyVector _Enemys;
       UPtrEnemyCreator creatorEnemys;
+      UPtrGameObjectCreator creatorGameObjects;
       int countEnemys;
       unsigned int seed = 0;
       unsigned int Height = 0, Width = 0;

@@ -1,17 +1,18 @@
 #pragma once
 #include "../GameObject/GameObject.h"
 
+typedef std::shared_ptr<GameObject> SPtrGameObject;
+
 class Tile
 {
 private:
    sf::Sprite sprite;
-
    int x = 0, y = 0;
    int tileWidth;
    int tileHeight;
    int tileType;
 public:
-   GameObject *Object;
+   SPtrGameObject Object;
    SPtrWeapon Weapon;
    sf::Sprite getSprite();
    void setSprite(sf::Sprite _sprite);

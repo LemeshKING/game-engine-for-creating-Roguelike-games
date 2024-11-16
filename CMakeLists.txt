@@ -46,7 +46,9 @@ set(SOURCES_FILES src/main.cpp
 	src/Map/EnemyCreator.h
 	src/Map/EnemyCreator.cpp
 	src/Ghoul/Ghoul.h
-	src/Ghoul/Ghoul.cpp)
+	src/Ghoul/Ghoul.cpp
+	src/Map/GameObjectCreator.h
+	src/Map/GameObjectCreator.cpp)
 	
 project(${PROJECT_NAME})
 
