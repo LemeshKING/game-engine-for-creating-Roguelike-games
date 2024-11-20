@@ -1,3 +1,4 @@
+#pragma once
 #include"../Wizard/wizard.h"
 #include"../Ghoul/Ghoul.h"
 

@@ -1,4 +1,5 @@
 #include "wizard.h"
+#include<iostream>
 
 void Wizard::update(const float time, IntVectorVector& location)
 {
@@ -85,9 +86,11 @@ void Wizard::Initialization(int x, int y)
 
 void Wizard::Attack()
 {
-   
+
    if (chardgeAttack > 144)
    {
+      if (directionAtack.y == 0)
+         directionAtack.y = 1;
       projectTile.Initialization(rect.left, rect.top);
       projectTile.setDirection(directionAtack);
       float length = sqrt((playerPosition.left + playerPosition.width / 2 - rect.left) * (playerPosition.left + playerPosition.width / 2 - rect.left) + (playerPosition.top + playerPosition.height / 2 - rect.top) * (playerPosition.top + playerPosition.height / 2 - rect.top));

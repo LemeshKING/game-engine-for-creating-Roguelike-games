@@ -97,13 +97,13 @@ void Game::TestingPlayerMove(sf::RenderWindow& window)
 				window.close();
 
 		}
-		healthBar.setX(pl.getRect().left);
-		healthBar.setY(pl.getRect().top);
-		if (healthBar.getFullHealthBar().getSize().x > pl.getRect().left)
-			healthBar.setX(healthBar.getFullHealthBar().getSize().x);
+		healthBar->setX(pl.getRect().left);
+		healthBar->setY(pl.getRect().top);
+		if (healthBar->getFullHealthBar().getSize().x > pl.getRect().left)
+			healthBar->setX(healthBar->getFullHealthBar().getSize().x);
 		else if (pl.getRect().left > (location.getWidth() - 17) * 32)
-			healthBar.setX((location.getWidth() - 17) * 32);
-		healthBar.update(pl.getHealth().getHealthPoints());
+			healthBar->setX((location.getWidth() - 17) * 32);
+		healthBar->update();
 		pl.update(timer, location.TypeOfTiles);
 		if(time < 3);
 		else if(time < 5)
@@ -136,9 +136,9 @@ void Game::TestingPlayerMove(sf::RenderWindow& window)
 		if(pl.key["Attack"] && pl.animation.getAnimation().getFrame() >= 2)
 			window.draw(pl.getWeapon()->getSprite());
 		window.draw(pl.animation.getAnimation().getSprite());
-		window.draw(healthBar.getFullHealthBar());
-		window.draw(healthBar.getCurrentHealthBar());
-		window.draw(healthBar.getText());
+		window.draw(healthBar->getFullHealthBar());
+		window.draw(healthBar->getCurrentHealthBar());
+		window.draw(healthBar->getText());
 		window.display();
 		
 		window.clear(sf::Color::White);
@@ -184,16 +184,16 @@ void Game::TestingInterectionWithEnemy(sf::RenderWindow& window)
 		if (pl.key["Attack"] && pl.animation.getAnimation().getFrame() >= 2)
 			window.draw(pl.getWeapon()->getSprite());
 		window.draw(enemy.animation.getAnimation().getSprite());
-		healthBar.setX(pl.getRect().left);
-		healthBar.setY(pl.getRect().top);
-		if (healthBar.getFullHealthBar().getSize().x > pl.getRect().left)
-			healthBar.setX(healthBar.getFullHealthBar().getSize().x);
+		healthBar->setX(pl.getRect().left);
+		healthBar->setY(pl.getRect().top);
+		if (healthBar->getFullHealthBar().getSize().x > pl.getRect().left)
+			healthBar->setX(healthBar->getFullHealthBar().getSize().x);
 		else if (pl.getRect().left > (location.getWidth() - 17) * 32)
-			healthBar.setX((location.getWidth() - 17) * 32);
-		healthBar.update(pl.getHealth().getHealthPoints());
-		window.draw(healthBar.getFullHealthBar());
-		window.draw(healthBar.getCurrentHealthBar());
-		window.draw(healthBar.getText());
+			healthBar->setX((location.getWidth() - 17) * 32);
+		healthBar->update();
+		window.draw(healthBar->getFullHealthBar());
+		window.draw(healthBar->getCurrentHealthBar());
+		window.draw(healthBar->getText());
 		if(pl.isAlive())
 		{
 			pl.update(timer, location.TypeOfTiles);
@@ -319,13 +319,13 @@ void Game::Run(sf::RenderWindow &window)
 				}
 			raisingWeaponsFrames++;
 			pl.update(5,location.TypeOfTiles);
-			healthBar.setX(pl.getRect().left);
-			healthBar.setY(pl.getRect().top);
-			if(healthBar.getFullHealthBar().getSize().x > pl.getRect().left)
-				healthBar.setX(healthBar.getFullHealthBar().getSize().x);
+			healthBar->setX(pl.getRect().left);
+			healthBar->setY(pl.getRect().top);
+			if(healthBar->getFullHealthBar().getSize().x > pl.getRect().left)
+				healthBar->setX(healthBar->getFullHealthBar().getSize().x);
 			else if(pl.getRect().left > (location.getWidth() - 17) * 32)
-				healthBar.setX((location.getWidth() - 17) * 32);
-			healthBar.update(pl.getHealth().getHealthPoints());
+				healthBar->setX((location.getWidth() - 17) * 32);
+			healthBar->update();
 			if(pl.animation.getAnimation().getFrame() >= 2 && pl.key["Attack"])
 			{
 				window.draw(pl.getWeapon()->getSprite());
@@ -378,9 +378,9 @@ void Game::Run(sf::RenderWindow &window)
 			}
 
 
-			window.draw(healthBar.getFullHealthBar());
-			window.draw(healthBar.getCurrentHealthBar());
-			window.draw(healthBar.getText());
+			window.draw(healthBar->getFullHealthBar());
+			window.draw(healthBar->getCurrentHealthBar());
+			window.draw(healthBar->getText());
 			window.draw(pl.animation.getAnimation().getSprite());
 
 			window.display();
@@ -411,7 +411,7 @@ void Game::Initialization()
 	
 	
 
-	
+	SPtrObserver helathBarObserver = std::make_shared<HealthBar>();
 	location.setSeed(9928);
    location.setHeight(70);
    location.setWidth(250);
@@ -427,7 +427,10 @@ void Game::Initialization()
 	Sword->setDamageValue(34);
 	pl.setWeapon(Sword);
 	pl.setHealth(health);
-	healthBar.Initialization(pl.getHealth().getMaxHealthPoints(), 0, location.getStartPlayerPosition() + 7);
+	healthBar = std::make_shared<HealthBar>();
+	healthBar = std::static_pointer_cast<HealthBar>(helathBarObserver);
+	healthBar->Initialization(pl.getHealth().getMaxHealthPoints(), 0, location.getStartPlayerPosition() + 7);
+	pl.Attach(helathBarObserver);
 	sf::RenderWindow window(sf::VideoMode(w, h), "My first Game", sf::Style::Fullscreen);
 	Camera camera;
 	sf::View view;

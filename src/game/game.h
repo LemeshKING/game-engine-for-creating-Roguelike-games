@@ -1,3 +1,4 @@
+#pragma once
 #include "../player/player.h"
 #include "../enemy/enemy.h"
 #include "../Map/map.h"
@@ -5,6 +6,7 @@
 #include "../HealthBar/HealthBar.h"
 
 #include <iostream>
+
 class Game
 {
 private:
@@ -12,9 +14,9 @@ private:
    int h = 1080;
    int mouseX = w / 2 + 64;
    int mouseY = h / 2;
-   HealthBar healthBar;
+   std::shared_ptr<HealthBar> healthBar;
    mp::Map location;
-   std::vector<std::unique_ptr<Enemy>> Enemys;
+   UPtrEnemyVector Enemys;
    Player pl;
 public:
    Game();

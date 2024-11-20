@@ -1,12 +1,9 @@
 #include "HealthBar.h"
 
-void HealthBar::update(const unsigned int & _currentHp)
+void HealthBar::update()
 {
-   float ration = (float)_currentHp / (float)maxHp;
    fullBar.setPosition(x - fullBar.getSize().x + 32, y + 7 * 32);
-   currentHealthBar.setSize(sf::Vector2f(ration * fullBar.getSize().x, 16));
    currentHealthBar.setPosition(x - fullBar.getSize().x + 32, y + 7 * 32);
-   helathPoints.setString(std::to_string(_currentHp));
    helathPoints.setPosition(x - fullBar.getSize().x + 282, y + 7 * 32);
 }
 
@@ -39,6 +36,13 @@ void HealthBar::setX(int _x)
 void HealthBar::setY(int _y)
 {
    y = _y;
+}
+
+void HealthBar::HealthChange(const unsigned int& _currentHp)
+{
+   float ration = (float)_currentHp / (float)maxHp;
+   currentHealthBar.setSize(sf::Vector2f(ration * fullBar.getSize().x, 16));
+   helathPoints.setString(std::to_string(_currentHp));
 }
 
 sf::RectangleShape HealthBar::getFullHealthBar()

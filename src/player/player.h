@@ -2,10 +2,13 @@
 #include"../character/character.h"
 #include "../Camera/Camera.h"
 #include "../Weapon/weapon.h"
+#include "../ISubject/ISubject.h"
+#include <list>
 
 typedef std::shared_ptr<weapon> SPtrWeapon;
+typedef std::list<SPtrObserver> ListUptrObserver;
 
-class Player : public Character
+class Player : public Character, public ISubject
 {
  public: 
 
@@ -26,10 +29,13 @@ class Player : public Character
    int dashColdown = 77;
    bool canMove = true;
    int immuneFrames = 0;
+   void Attach(SPtrObserver &observer) override;
+   void Detach(SPtrObserver &observer) override;
+   void Notify() override;
 protected:
    void ChangeStateCharacter() override;
 private:
- 
+   ListUptrObserver Observers;
    SPtrWeapon Weapon;
    bool immunity = false;
 

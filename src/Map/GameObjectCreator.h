@@ -1,3 +1,4 @@
+#pragma once
 #include "../thorns/thorns.h"
 #include "../teleport/teleport.h"
 

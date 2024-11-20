@@ -124,6 +124,7 @@ void Player::TakeDamage(int damageValue)
    if(!immunity)
    {  
       health.TakeDamage(damageValue);
+      Notify();
       if(health.getHealthPoints() == 0)
          Kill();
       dx = -1 * direction * 5;
@@ -155,6 +156,22 @@ void Player::BecomeImmune()
 SPtrWeapon Player::getWeapon()
 {
    return Weapon;
+}
+
+void Player::Attach(SPtrObserver &observer)
+{
+   Observers.push_back(observer);
+}
+
+void Player::Detach(SPtrObserver &observer)
+{
+   Observers.remove(observer);
+}
+
+void Player::Notify()
+{
+   for(auto &i: Observers)
+      i->HealthChange(health.getHealthPoints());
 }
 
 void Player::ChangeStateCharacter()

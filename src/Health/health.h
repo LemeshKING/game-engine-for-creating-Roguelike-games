@@ -1,3 +1,4 @@
+#pragma once
 namespace hlth
 {
    class Health
