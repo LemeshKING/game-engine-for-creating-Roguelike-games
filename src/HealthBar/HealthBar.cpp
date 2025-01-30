@@ -10,7 +10,8 @@ void HealthBar::update()
 void HealthBar::Initialization(unsigned int _maxHP,int x, int y)
 {
    maxHp = _maxHP;                     
-   font.loadFromFile("../src/arial/ttt.otf");
+   if(!font.loadFromFile("../src/arial/ttt.otf"))
+      font.loadFromFile("../../src/arial/ttt.otf");
    helathPoints.setFont(font);
    helathPoints.setCharacterSize(12);
    helathPoints.setOutlineThickness(0.5);

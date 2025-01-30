@@ -1,11 +1,13 @@
 #pragma once
 #include "../player/player.h"
 #include "../enemy/enemy.h"
-#include "../Map/map.h"
+#include "../LocationCreator/LocationCreator.h"
 #include "../sword/sword.h"
 #include "../HealthBar/HealthBar.h"
 
 #include <iostream>
+
+typedef std::unique_ptr<LocationCreator> UPtrLC;
 
 class Game
 {
@@ -15,7 +17,7 @@ private:
    int mouseX = w / 2 + 64;
    int mouseY = h / 2;
    std::shared_ptr<HealthBar> healthBar;
-   mp::Map location;
+   UPtrMap location;
    UPtrEnemyVector Enemys;
    Player pl;
 public:

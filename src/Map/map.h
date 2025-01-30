@@ -11,10 +11,11 @@ typedef std::vector<UPtrEnemy> UPtrEnemyVector;
 typedef std::unique_ptr<EnemyCreator> UPtrEnemyCreator;
 typedef std::unique_ptr<GameObjectCreator> UPtrGameObjectCreator;
 
-namespace mp{
+namespace mp
+{
    class Map
    {
-   private:
+   protected:
       UPtrEnemyVector _Enemys;
       UPtrEnemyCreator creatorEnemys;
       UPtrGameObjectCreator creatorGameObjects;
@@ -25,19 +26,21 @@ namespace mp{
       int countNoiseFunction = 0;
       int startPlayerPosition;
       sf::Texture texture;
-   public:
-      int currentEnemy = 0;
+
       int countCaves = 0;
       int CavesWidth = 0;
       bool canGenerateCave = true;
       int randomMapPoint;
       IntVector rndMapPoints;
+      virtual void smoothMap() = 0;
+      virtual void FillMap() = 0;
    public:
+      int currentEnemy = 0;
       IntVectorVector TypeOfTiles;
       int tryRnd = 0;
       std::vector<std::vector<Tile>> TileMap;
       IntVector MapHeightValues;
-      void GenerateMap();
+      virtual void GenerateLocation() = 0;
       unsigned int getHeight();
       unsigned int getWidth();
       void setHeight(unsigned int _Height);
@@ -49,9 +52,9 @@ namespace mp{
       int getStartPlayerPosition();
       UPtrEnemyVector getEnemys();
    private: 
-      void smoothMap();
-      void GenerateCaves();
-      void SmoothCaves(IntVector &Cave);
-      void FillMap();
+      
+      //void GenerateCaves();
+      //void SmoothCaves(IntVector &Cave);
+      
    };
 }

@@ -50,7 +50,11 @@ set(SOURCES_FILES src/main.cpp
 	src/Map/GameObjectCreator.h
 	src/Map/GameObjectCreator.cpp
 	src/ISubject/ISubject.h
-	src/Observer/Observer.h)
+	src/Observer/Observer.h
+	src/Meadows/Meadows.h
+	src/Meadows/Meadows.cpp
+	src/LocationCreator/LocationCreator.cpp
+	src/LocationCreator/LocationCreator.h)
 	
 project(${PROJECT_NAME})
 
