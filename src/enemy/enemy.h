@@ -17,7 +17,7 @@ protected:
    void Enemy::CollisionX(IntVectorVector& location) override;
    void Enemy::CollisionY(IntVectorVector& location) override;
    bool playerAlive = true;
-
+   unsigned int cost;
  public:
    virtual void Attack();
    ProjectTile projectTile;
@@ -30,4 +30,5 @@ protected:
    sf::FloatRect getVision();
    void setPlayerPosition(sf::FloatRect _PlayerPosition);
    bool wasAttaking = false;
+   unsigned int getCost();
 };

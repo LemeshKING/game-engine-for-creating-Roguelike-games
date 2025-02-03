@@ -32,13 +32,14 @@ class Player : public Character, public ISubject
    void Attach(SPtrObserver &observer) override;
    void Detach(SPtrObserver &observer) override;
    void Notify() override;
+   void gainMoney(unsigned int &cost);
 protected:
    void ChangeStateCharacter() override;
 private:
    ListUptrObserver Observers;
    SPtrWeapon Weapon;
    bool immunity = false;
-
+   unsigned int wallet = 0;
    Camera camera;
    void CollisionX(IntVectorVector& location) override;
    void CollisionY(IntVectorVector& location) override;

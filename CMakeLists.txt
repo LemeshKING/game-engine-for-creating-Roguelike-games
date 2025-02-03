@@ -54,7 +54,9 @@ set(SOURCES_FILES src/main.cpp
 	src/Meadows/Meadows.h
 	src/Meadows/Meadows.cpp
 	src/LocationCreator/LocationCreator.cpp
-	src/LocationCreator/LocationCreator.h)
+	src/LocationCreator/LocationCreator.h
+	src/Money/Money.cpp
+	src/Money/Money.h)
 	
 project(${PROJECT_NAME})
 

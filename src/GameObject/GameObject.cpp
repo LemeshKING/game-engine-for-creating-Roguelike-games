@@ -1,10 +1,5 @@
 #include "GameObject.h"
 
-void GameObject::PlayerInteraction(Player& _player)
-{
-
-}
-
 void GameObject::setSprite(sf::Sprite _sprite)
 {
    sprite = _sprite;

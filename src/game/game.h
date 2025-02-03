@@ -4,10 +4,12 @@
 #include "../LocationCreator/LocationCreator.h"
 #include "../sword/sword.h"
 #include "../HealthBar/HealthBar.h"
-
+#include "../Money/Money.h"
 #include <iostream>
 
 typedef std::unique_ptr<LocationCreator> UPtrLC;
+typedef std::unique_ptr<Money> UPtrMoney;
+typedef std::vector<UPtrMoney> UPtrMoneyVector;
 
 class Game
 {
@@ -19,6 +21,7 @@ private:
    std::shared_ptr<HealthBar> healthBar;
    UPtrMap location;
    UPtrEnemyVector Enemys;
+   UPtrMoneyVector Coins;
    Player pl;
 public:
    Game();
@@ -29,6 +32,7 @@ public:
    void Pause();
    void Menu();
    void Initialization();
+   void drawBack(sf::RenderWindow& window);
 
 };
 

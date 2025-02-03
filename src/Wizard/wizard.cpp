@@ -69,6 +69,7 @@ void Wizard::update(const float time, IntVectorVector& location)
 
 void Wizard::Initialization(int x, int y)
 {
+   cost = 125;
    rectangle.setFillColor(sf::Color::Color(225,70,70));
    rect = sf::FloatRect(x, y, characterWidth, characterHeight);
    Vision = sf::FloatRect(x + characterWidth, y - characterHeight, 400, 400);

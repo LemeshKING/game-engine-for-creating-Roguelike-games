@@ -7,7 +7,7 @@ UPtrEnemy WizardCreator::factoryMethod() const
 
    UPtrEnemy tmp = std::make_unique<Wizard>();
 
-   tmp->setCharacterHeight(50);
+
    tmp->setHealth(health);
    tmp->setCharacterHeight(50);
    tmp->setCharacterWidth(40);
@@ -22,7 +22,7 @@ UPtrEnemy ZombieCreator::factoryMethod() const
    health.setHealthPoints(100);
 
    UPtrEnemy tmp = std::make_unique<Enemy>();
-   tmp->setCharacterHeight(50);
+
    tmp->setHealth(health);
    tmp->setCharacterHeight(50);
    tmp->setCharacterWidth(40);
@@ -37,7 +37,7 @@ UPtrEnemy GhoulCreator::factoryMethod() const
    health.setHealthPoints(100);
 
    UPtrEnemy tmp = std::make_unique<Ghoul>();
-   tmp->setCharacterHeight(50);
+
    tmp->setHealth(health);
    tmp->setCharacterHeight(50);
    tmp->setCharacterWidth(40);

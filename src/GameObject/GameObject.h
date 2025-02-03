@@ -13,7 +13,7 @@ protected:
    int SizeX;
    int SizeY;
 public:
-   virtual void PlayerInteraction(Player& _player);
+   virtual void PlayerInteraction(Player& _player) = 0;
    void setSprite(sf::Sprite _sprite);
    sf::Sprite getSprite();
    void setX(int _x);

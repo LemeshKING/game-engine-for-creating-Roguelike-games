@@ -2,6 +2,7 @@
 #include "../thorns/thorns.h"
 #include "../teleport/teleport.h"
 
+
 typedef std::shared_ptr<GameObject> SPtrGameObject;
 
 

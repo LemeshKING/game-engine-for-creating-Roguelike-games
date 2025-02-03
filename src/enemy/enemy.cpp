@@ -8,6 +8,7 @@ void Enemy::SawPlayer(bool _sawPlayer)
 
 void Enemy::Initialization(int x, int y)
 {
+   cost = 100;
    rectangle.setFillColor(sf::Color::Red);
    rect = sf::FloatRect(x, y, characterWidth, characterHeight);
    Vision = sf::FloatRect(x + characterWidth, y - characterHeight, 200, 200);
@@ -107,6 +108,11 @@ sf::FloatRect Enemy::getVision()
 void Enemy::setPlayerPosition(sf::FloatRect _PlayerPosition)
 {
    playerPosition = _PlayerPosition;
+}
+
+unsigned int Enemy::getCost()
+{
+   return cost;
 }
 
 void Enemy::CollisionX(IntVectorVector& location)

@@ -174,6 +174,11 @@ void Player::Notify()
       i->HealthChange(health.getHealthPoints());
 }
 
+void Player::gainMoney(unsigned int& cost)
+{
+   wallet += cost;
+}
+
 void Player::ChangeStateCharacter()
 {
    if (key["L"])
@@ -260,11 +265,5 @@ void Player::CollisionY(IntVectorVector& location)
                dy = 0;
             }
          }
-         else if (location[i][j] == 4)
-         {
-            if(!immunity)
-               TakeDamage(health.getHealthPoints());
-                
-               
-         }
+        
 }

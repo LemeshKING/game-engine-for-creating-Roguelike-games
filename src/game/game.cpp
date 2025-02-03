@@ -290,17 +290,25 @@ void Game::Run(sf::RenderWindow &window)
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
-		
+			drawBack(window);
 			for (int i = pl.getCamera().getCenterY() / 32 - 9; i < pl.getCamera().getCenterY() / 32 + 10; i++)
 				for (int j = pl.getCamera().getCenterX() / 32 - 15; j < pl.getCamera().getCenterX() / 32 + 17; j++)
 				{
-					window.draw(location->TileMap[i][j].getSprite());
+					
 					if(location->TileMap[i][j].Object != nullptr)
 					{
 						if(pl.getRect().intersects(location->TileMap[i][j].Object->getSprite().getGlobalBounds()))
 							location->TileMap[i][j].Object->PlayerInteraction(pl);
+						
 						window.draw(location->TileMap[i][j].Object->getSprite());
+						if (location->TileMap[i][j].Object->getSprite().getColor() == sf::Color::Black)
+						{	
+							location->TileMap[i][j].Object.reset();
+							location->TileMap[i][j].Object = nullptr;
+						}
 					}
+					
+						
 					if(location->TileMap[i][j].Weapon != nullptr)
 					{
 						if (pl.getRect().intersects(location->TileMap[i][j].Weapon->getRect()))
@@ -361,6 +369,10 @@ void Game::Run(sf::RenderWindow &window)
 				}
 				else
 				{
+					//UPtrMoney tmp = std::make_unique<Money>(Enemys[i]->getCost(),Enemys[i]->getRect().getPosition().x, Enemys[i]->getRect().getPosition().y);
+					//Coins.emplace_back(tmp);
+					int k1 = Enemys[i]->getRect().top / 32, k2 = Enemys[i]->getRect().left / 32;
+					location->TileMap[Enemys[i]->getRect().top / 32][Enemys[i]->getRect().left / 32].Object = std::make_shared<Money>(Enemys[i]->getCost(), Enemys[i]->getRect().left, Enemys[i]->getRect().top);
 					Enemys[i].reset();
 					Enemys.erase(Enemys.begin() + i);
 				}
@@ -383,18 +395,16 @@ void Game::Run(sf::RenderWindow &window)
 			window.draw(healthBar->getText());
 			window.draw(pl.animation.getAnimation().getSprite());
 
-			window.display();
-			window.setView(pl.getCamera().getView());
-			window.clear(sf::Color::White);
+
 		}
 		else
-		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
-			window.display();
-			window.setView(pl.getCamera().getView());
-			window.clear(sf::Color::White);
-		}
+
+		
+		window.display();
+		window.setView(pl.getCamera().getView());
+		window.clear(sf::Color::White);
 	}
 }
 
@@ -414,7 +424,7 @@ void Game::Initialization()
 	int count = 10;
 	unsigned int seed = 9928;
 	UPtrLC creator = std::make_unique<MeadowsCreator>();
-	location = creator->factoryMethood(Height,Withd, persistence,count,seed);
+	location = creator->factoryMethood(Height,Withd, persistence, count, seed);
 
 	SPtrObserver helathBarObserver = std::make_shared<HealthBar>();
 	SPtrWeapon Sword = std::make_shared<sword>();
@@ -443,11 +453,18 @@ void Game::Initialization()
 	Enemys = location->getEnemys();
 	if(Enemys.size() > location->currentEnemy)
 		Enemys.resize(location->currentEnemy);
-
+	//Coins.reserve(Enemys.size());
 
 	pl.setCamera(camera);
 	Run(window);
 	//TestingProceduralGeneration(window);
 	//TestingPlayerMove(window);
 	//TestingInterectionWithEnemy(window);
+}
+
+void Game::drawBack(sf::RenderWindow& window)
+{
+	for (int i = pl.getCamera().getCenterY() / 32 - 9; i < pl.getCamera().getCenterY() / 32 + 10; i++)
+		for (int j = pl.getCamera().getCenterX() / 32 - 15; j < pl.getCamera().getCenterX() / 32 + 17; j++)
+			window.draw(location->TileMap[i][j].getSprite());
 }
