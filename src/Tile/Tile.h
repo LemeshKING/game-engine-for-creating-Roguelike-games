@@ -1,5 +1,6 @@
 #pragma once
 #include "../GameObject/GameObject.h"
+#include "../enemy/enemy.h"
 
 
 
@@ -8,12 +9,14 @@ typedef std::shared_ptr<GameObject> SPtrGameObject;
 class Tile
 {
 private:
-   sf::Sprite sprite;
+   
    int x = 0, y = 0;
    int tileWidth;
    int tileHeight;
    int tileType;
 public:
+   sf::Sprite sprite;
+   std::vector<std::shared_ptr<Enemy>> enemysOnTile;
    SPtrGameObject Object;
    SPtrWeapon Weapon;
    sf::Sprite getSprite();

@@ -1,11 +1,11 @@
 #include "EnemyCreator.h"
 
-UPtrEnemy WizardCreator::factoryMethod() const
+SPtrEnemy WizardCreator::factoryMethod() const
 {
    hlth::Health health;
    health.setHealthPoints(100);
 
-   UPtrEnemy tmp = std::make_unique<Wizard>();
+   SPtrEnemy tmp = std::make_unique<Wizard>();
 
 
    tmp->setHealth(health);
@@ -16,12 +16,12 @@ UPtrEnemy WizardCreator::factoryMethod() const
    return std::move(tmp);
 }
 
-UPtrEnemy ZombieCreator::factoryMethod() const
+SPtrEnemy ZombieCreator::factoryMethod() const
 {
    hlth::Health health;
    health.setHealthPoints(100);
 
-   UPtrEnemy tmp = std::make_unique<Enemy>();
+   SPtrEnemy tmp = std::make_unique<Enemy>();
 
    tmp->setHealth(health);
    tmp->setCharacterHeight(50);
@@ -31,12 +31,12 @@ UPtrEnemy ZombieCreator::factoryMethod() const
    return std::move(tmp);
 }
 
-UPtrEnemy GhoulCreator::factoryMethod() const
+SPtrEnemy GhoulCreator::factoryMethod() const
 {
    hlth::Health health;
    health.setHealthPoints(100);
 
-   UPtrEnemy tmp = std::make_unique<Ghoul>();
+   SPtrEnemy tmp = std::make_unique<Ghoul>();
 
    tmp->setHealth(health);
    tmp->setCharacterHeight(50);

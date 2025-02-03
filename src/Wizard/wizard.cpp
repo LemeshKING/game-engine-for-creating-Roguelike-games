@@ -64,6 +64,7 @@ void Wizard::update(const float time, IntVectorVector& location)
       Vision.left = rect.left - Vision.width;
    else
       Vision.left = rect.left + rect.width;
+   //position = rect.left / 32 + rect.top / 32 * 250;
 
 }
 
@@ -82,6 +83,7 @@ void Wizard::Initialization(int x, int y)
    animation.CreateAnimation("attack", 0, 50, characterWidth, characterHeight, 5, 0.0045);
    animation.CreateAnimation("stay",0,0,characterWidth,characterHeight,1,0.0);
    CharacterState = walk;
+   //position = x / 32 + y / 32 * 250;
    dx = 0.1;
 }
 

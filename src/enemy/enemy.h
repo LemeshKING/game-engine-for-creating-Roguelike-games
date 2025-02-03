@@ -18,7 +18,10 @@ protected:
    void Enemy::CollisionY(IntVectorVector& location) override;
    bool playerAlive = true;
    unsigned int cost;
+   
  public:
+   int positionX = 0;
+   int positionY = 0;
    virtual void Attack();
    ProjectTile projectTile;
    void SawPlayer(bool _sawPlayer);

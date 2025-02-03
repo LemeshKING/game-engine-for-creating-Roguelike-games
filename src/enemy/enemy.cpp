@@ -19,6 +19,8 @@ void Enemy::Initialization(int x, int y)
    animation.setTexture(texture);
    animation.CreateAnimation("walk",0,0,characterWidth,characterHeight,5,0.01);
    animation.CreateAnimation("attack",0,50,characterWidth,characterHeight,5,0.0045);
+   positionX = x / 32;
+   positionY = y / 32;
    CharacterState = walk;
    dx = 0.15;
 }
@@ -82,8 +84,8 @@ void Enemy::update(const float time, IntVectorVector& location)
       Vision.left = rect.left - Vision.width;
    else
       Vision.left = rect.left + rect.width;
-
-   
+   positionX = (int)rect.left / 32;
+   positionY = (int)rect.top / 32;
 }
 void Enemy::TakeDamage(int damageValue)
 {

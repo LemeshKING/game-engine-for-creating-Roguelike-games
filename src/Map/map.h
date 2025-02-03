@@ -7,7 +7,7 @@
 #include <random>
 
 typedef std::vector<IntVector> IntVectorVector;
-typedef std::vector<UPtrEnemy> UPtrEnemyVector;
+typedef std::vector<SPtrEnemy> SPtrEnemyVector;
 typedef std::unique_ptr<EnemyCreator> UPtrEnemyCreator;
 typedef std::unique_ptr<GameObjectCreator> UPtrGameObjectCreator;
 
@@ -16,7 +16,7 @@ namespace mp
    class Map
    {
    protected:
-      UPtrEnemyVector _Enemys;
+      SPtrEnemyVector _Enemys;
       UPtrEnemyCreator creatorEnemys;
       UPtrGameObjectCreator creatorGameObjects;
       int countEnemys;
@@ -50,7 +50,7 @@ namespace mp
       void setSeed(unsigned int _seed);
       unsigned int getSeed();
       int getStartPlayerPosition();
-      UPtrEnemyVector getEnemys();
+      SPtrEnemyVector getEnemys();
    private: 
       
       //void GenerateCaves();

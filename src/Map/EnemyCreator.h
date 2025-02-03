@@ -2,16 +2,16 @@
 #include"../Wizard/wizard.h"
 #include"../Ghoul/Ghoul.h"
 
-typedef std::unique_ptr<Enemy> UPtrEnemy;
-typedef std::unique_ptr<Wizard> UPtrWizard;
-typedef std::unique_ptr<Ghoul> UPtrGhoul;
+typedef std::shared_ptr<Enemy> SPtrEnemy;
+typedef std::shared_ptr<Wizard> SPtrWizard;
+typedef std::shared_ptr<Ghoul> SPtrGhoul;
 
 class EnemyCreator
 {
  public:
 
    virtual ~EnemyCreator() {};
-   virtual UPtrEnemy factoryMethod() const = 0;
+   virtual SPtrEnemy factoryMethod() const = 0;
    
 };
 
@@ -19,19 +19,19 @@ class WizardCreator : public EnemyCreator
 {
  public:
 
-   UPtrEnemy factoryMethod() const override;
+   SPtrEnemy factoryMethod() const override;
 };
 
 class ZombieCreator : public EnemyCreator
 {
 public:
 
-   UPtrEnemy factoryMethod() const override;
+   SPtrEnemy factoryMethod() const override;
 };
 
 class GhoulCreator : public EnemyCreator
 {
 public:
 
-   UPtrEnemy factoryMethod() const override;
+   SPtrEnemy factoryMethod() const override;
 };

@@ -6,6 +6,7 @@
 #include "../HealthBar/HealthBar.h"
 #include "../Money/Money.h"
 #include <iostream>
+#include <thread>
 
 typedef std::unique_ptr<LocationCreator> UPtrLC;
 typedef std::unique_ptr<Money> UPtrMoney;
@@ -20,7 +21,7 @@ private:
    int mouseY = h / 2;
    std::shared_ptr<HealthBar> healthBar;
    UPtrMap location;
-   UPtrEnemyVector Enemys;
+   SPtrEnemyVector Enemys;
    UPtrMoneyVector Coins;
    Player pl;
 public:

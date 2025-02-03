@@ -45,11 +45,13 @@ void Meadows::FillMap()
 				if (TypeEnemy < 70)
 					creatorEnemys = std::make_unique<ZombieCreator>();
 				else
-					creatorEnemys = std::make_unique<WizardCreator>();
+					creatorEnemys = std::make_unique</*WizardCreator*/ZombieCreator>();
 
-				_Enemys[currentEnemy] = creatorEnemys->factoryMethod();
-				_Enemys[currentEnemy]->Initialization(i * 32, (Height - MapHeightValues[i] - 3) * 32);
+				SPtrEnemy enemy = creatorEnemys->factoryMethod();
+				enemy->Initialization(i * 32, (Height - MapHeightValues[i] - 3) * 32);
+				TileMap[Height - MapHeightValues[i] - 3][i].enemysOnTile.push_back(enemy);
 				currentEnemy++;
+				
 			}
 		}
 		else
@@ -236,27 +238,28 @@ void Meadows::GenerateCaves()
 			TileMap[Height - 1 - MapHeightValues[i]][i].setSprite(tmp);
 			TileMap[Height - 1 - MapHeightValues[i]][i].setType(0);
 		}
-		for (int i = 10; i < CavesWidth - 5; i++)
-		{
-			if (currentEnemy < countEnemys)
-			{
-				int isSpawnEnemy = abs((int)pg::PerlinNoise1D(i * seed, persistence, countNoiseFunction)) % 100;
-				if (isSpawnEnemy > 70)
-				{
-					int TypeEnemy = abs((int)pg::PerlinNoise1D(i * seed * currentEnemy, persistence, countNoiseFunction)) % 100;
+		//for (int i = 10; i < CavesWidth - 5; i++)
+		//{
+		//	if (currentEnemy < countEnemys)
+		//	{
+		//		int isSpawnEnemy = abs((int)pg::PerlinNoise1D(i * seed, persistence, countNoiseFunction)) % 100;
+		//		if (isSpawnEnemy > 70)
+		//		{
+		//			int TypeEnemy = abs((int)pg::PerlinNoise1D(i * seed * currentEnemy, persistence, countNoiseFunction)) % 100;
 
-					if (TypeEnemy < 70)
-						creatorEnemys = std::make_unique<ZombieCreator>();
-					else
-						creatorEnemys = std::make_unique<WizardCreator>();
-					_Enemys[currentEnemy] = creatorEnemys->factoryMethod();
-					_Enemys[currentEnemy]->Initialization((i + rndMapPoints[k]) * 32, (Height - CavesHeight[i] - 3) * 32);
-					currentEnemy++;
-				}
-			}
-			else
-				break;
-		}
+		//			if (TypeEnemy < 70)
+		//				creatorEnemys = std::make_unique<ZombieCreator>();
+		//			/*else
+		//				creatorEnemys = std::make_unique<WizardCreator>();*/
+		//			SPtrEnemy enemy = creatorEnemys->factoryMethod();
+		//			enemy->Initialization((i + rndMapPoints[k]) * 32, (Height - CavesHeight[i] - 3) * 32);
+		//			TileMap[Height - CavesHeight[i] - 3][i].enemysOnTile.push_back(enemy);
+		//			currentEnemy++;
+		//		}
+		//	}
+		//	else
+		//		break;
+		//}
 		sf::Sprite tmp1;
 		creatorGameObjects = std::make_unique<TeleportCreator>();
 		IntVector tmp2{ rndMapPoints[k] * 32 ,(int)(Height - CavesHeight[0] - 2) * 32, (rndMapPoints[k] + CavesWidth - 3) * 32, (int)(Height - CavesHeight[CavesWidth - 2] - 2) * 32 - 64 };
