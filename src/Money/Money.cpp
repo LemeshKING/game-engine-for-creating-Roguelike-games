@@ -2,6 +2,8 @@
 
 Money::Money(int _cost, float _x, float _y)
 {
+   x = _x;
+   y = _y;
    if(!texture.loadFromFile("../src/Money/Coin.png"))
       texture.loadFromFile("../../src/Money/Coin.png");
    cost = _cost;

@@ -56,7 +56,9 @@ set(SOURCES_FILES src/main.cpp
 	src/LocationCreator/LocationCreator.cpp
 	src/LocationCreator/LocationCreator.h
 	src/Money/Money.cpp
-	src/Money/Money.h)
+	src/Money/Money.h
+	src/Physics2D/Physics2D.cpp
+	src/Physics2D/Physics2D.h)
 	
 project(${PROJECT_NAME})
 

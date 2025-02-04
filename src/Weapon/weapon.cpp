@@ -3,6 +3,7 @@
 void weapon::setRect(sf::FloatRect &_rect)
 {
    rect = _rect;
+   sprite.setPosition(rect.left,rect.top);
 }
 
 void weapon::setRectangle(sf::RectangleShape& _rect)

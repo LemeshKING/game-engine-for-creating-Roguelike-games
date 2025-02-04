@@ -179,6 +179,7 @@ void Player::gainMoney(unsigned int& cost)
    wallet += cost;
 }
 
+
 void Player::ChangeStateCharacter()
 {
    if (key["L"])

@@ -5,6 +5,7 @@
 #include "../sword/sword.h"
 #include "../HealthBar/HealthBar.h"
 #include "../Money/Money.h"
+#include "../Physics2D/Physics2D.h"
 #include <iostream>
 #include <thread>
 
@@ -36,4 +37,5 @@ public:
    void drawBack(sf::RenderWindow& window);
 
 };
+
 

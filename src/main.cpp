@@ -203,6 +203,8 @@ int main()
 	game.Initialization();
 
 
+
+
 	//sf::View view;
 	//view.reset(sf::FloatRect(0, 0, 1920, 1080));
 	//int w = 1920;

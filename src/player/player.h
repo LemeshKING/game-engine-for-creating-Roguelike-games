@@ -33,6 +33,7 @@ class Player : public Character, public ISubject
    void Detach(SPtrObserver &observer) override;
    void Notify() override;
    void gainMoney(unsigned int &cost);
+
 protected:
    void ChangeStateCharacter() override;
 private:

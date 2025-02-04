@@ -1,5 +1,5 @@
 #include "game.h"
-
+#include <chrono>
 
 Game::Game()
 {
@@ -232,6 +232,7 @@ void Game::Run(sf::RenderWindow &window)
 	int frames = 0;
 	bool onceAttack = true;
 	bool killEnemy = false;
+	SPtrGameObject coin = std::make_shared<Money>(50, 64, 64);
 	while (window.isOpen())
 	{
 		if(pl.isAlive())
@@ -288,8 +289,9 @@ void Game::Run(sf::RenderWindow &window)
 				
 			}
 
-
-
+			
+			gravity(coin, 5, location);
+			
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
 			drawBack(window);
@@ -301,7 +303,7 @@ void Game::Run(sf::RenderWindow &window)
 					{
 						if(pl.getRect().intersects(location->TileMap[i][j].Object->getSprite().getGlobalBounds()))
 							location->TileMap[i][j].Object->PlayerInteraction(pl);
-						
+						gravity(location->TileMap[i][j].Object, time, location);
 						window.draw(location->TileMap[i][j].Object->getSprite());
 						if (location->TileMap[i][j].Object->getSprite().getColor() == sf::Color::Black)
 						{	
@@ -317,39 +319,38 @@ void Game::Run(sf::RenderWindow &window)
 							if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && raisingWeaponsFrames > 77)
 							{
 								SPtrWeapon tmp = pl.getWeapon();
-								tmp->setRotation(45);
-								location->TileMap[i][j].Weapon->setRotation(0);
+								//tmp->setRotation(45);
+								//location->TileMap[i][j].Weapon->setRotation(0);
 								pl.setWeapon(location->TileMap[i][j].Weapon);
 								location->TileMap[i][j].Weapon = tmp;
 								raisingWeaponsFrames = 0;
 							}	
-						
+					gravity(location->TileMap[i][j].Weapon, time, location);
 					window.draw(location->TileMap[i][j].Weapon->getSprite());
 					}
 					for(int enemy = 0; enemy < location->TileMap[i][j].enemysOnTile.size(); enemy++)
 					{
 						if(!location->TileMap[i][j].enemysOnTile[enemy]->isAlive())
+						{
+							location->TileMap[i][j].enemysOnTile[enemy].reset();
 							location->TileMap[i][j].enemysOnTile.erase(location->TileMap[i][j].enemysOnTile.begin() + enemy);
+							location->TileMap[i][j].Object = std::make_shared<Money>(location->TileMap[i][j].enemysOnTile[enemy]->getCost(), location->TileMap[i][j].enemysOnTile[enemy]->getRect().left, location->TileMap[i][j].enemysOnTile[enemy]->getRect().top);
+						}
 						else
 						{
+							window.draw(location->TileMap[i][j].enemysOnTile[enemy]->animation.getAnimation().getSprite());
 							location->TileMap[i][j].enemysOnTile[enemy]->setPlayerPosition(pl.getRect());
 							location->TileMap[i][j].enemysOnTile[enemy]->update(5, location->TypeOfTiles);
-							window.draw(location->TileMap[i][j].enemysOnTile[enemy]->animation.getAnimation().getSprite());
+							
+							
 							if (location->TileMap[i][j].enemysOnTile[enemy]->positionX != j || location->TileMap[i][j].enemysOnTile[enemy]->positionY != i)
 							{
 								location->TileMap[location->TileMap[i][j].enemysOnTile[enemy]->positionY][location->TileMap[i][j].enemysOnTile[enemy]->positionX].enemysOnTile.push_back(location->TileMap[i][j].enemysOnTile[enemy]);
 								location->TileMap[i][j].enemysOnTile.erase(location->TileMap[i][j].enemysOnTile.begin() + enemy);
 
-
 							}
-					
-
-
-						}
-						
-							
+						}	
 					}
-					
 				}
 			raisingWeaponsFrames++;
 			pl.update(5,location->TypeOfTiles);
@@ -414,7 +415,7 @@ void Game::Run(sf::RenderWindow &window)
 					Enemys[i]->wasAttaking = false;
 			}
 
-
+			window.draw(coin->getSprite());
 			window.draw(healthBar->getFullHealthBar());
 			window.draw(healthBar->getCurrentHealthBar());
 			window.draw(healthBar->getText());
@@ -443,8 +444,10 @@ void Game::Menu()
 
 void Game::Initialization()
 {
+
 	std::thread locationThread([&]()
 	{
+
 		unsigned int Height = 70;
 		unsigned int Withd = 250;
 		float persistence = 3;
@@ -454,9 +457,9 @@ void Game::Initialization()
 		location = creator->factoryMethood(Height, Withd, persistence, count, seed);
 
 	});
+	std::thread playerThread([&]() {
+		
 
-	std::thread playerThread([&]()
-	{
 		SPtrObserver helathBarObserver = std::make_shared<HealthBar>();
 		hlth::Health health(150);
 		pl.setHealth(health);
@@ -465,8 +468,11 @@ void Game::Initialization()
 		healthBar = std::static_pointer_cast<HealthBar>(helathBarObserver);
 		pl.Attach(helathBarObserver);
 	});
+
 	std::thread cameraThread([&]()
 	{
+			
+	
 			Camera camera;
 			sf::View view;
 			camera.setView(view);
@@ -477,6 +483,7 @@ void Game::Initialization()
 			camera.setCenterY(h / 4 + 32);
 			pl.setCamera(camera);
 	});
+
 	SPtrWeapon Sword = std::make_shared<sword>();
 	locationThread.join();
 	playerThread.join();
@@ -507,3 +514,5 @@ void Game::drawBack(sf::RenderWindow& window)
 		for (int j = pl.getCamera().getCenterX() / 32 - 15; j < pl.getCamera().getCenterX() / 32 + 17; j++)
 			window.draw(location->TileMap[i][j].getSprite());
 }
+
+

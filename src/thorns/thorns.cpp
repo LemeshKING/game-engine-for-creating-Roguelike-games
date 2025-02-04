@@ -12,6 +12,5 @@ Thorns::Thorns()
 
 void Thorns::PlayerInteraction(Player& _player)
 {
-   if(!_player.isImmunity())
-      _player.TakeDamage(10);
+   _player.TakeDamage(10);
 }
