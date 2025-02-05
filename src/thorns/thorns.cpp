@@ -7,7 +7,7 @@ Thorns::Thorns()
       texture.loadFromFile("../../src/thorns/thorn.png");
    sprite.setTexture(texture);
    sprite.setTextureRect(sf::IntRect(0,0,32,36));
-   
+   physicalQ.rect = sprite.getGlobalBounds();
 }
 
 void Thorns::PlayerInteraction(Player& _player)

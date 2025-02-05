@@ -1,5 +1,10 @@
 #include "GameObject.h"
 
+void GameObject::update()
+{
+   sprite.setPosition(physicalQ.rect.getPosition());
+}
+
 void GameObject::setSprite(sf::Sprite _sprite)
 {
    sprite = _sprite;
@@ -12,13 +17,14 @@ sf::Sprite GameObject::getSprite()
 
 void GameObject::setX(int _x)
 {
-   x = _x;
+   physicalQ.rect.left = x = _x;
    sprite.setPosition(x, y);
+
 }
 
 void GameObject::setY(int _y)
 {
-   y = _y;
+   physicalQ.rect.top = y = _y;
    sprite.setPosition(x, y);
 }
 
@@ -30,4 +36,9 @@ int GameObject::getX()
 int GameObject::getY()
 {
    return y;
+}
+
+void GameObject::setRect(sf::FloatRect rect)
+{
+   physicalQ.rect = rect;
 }

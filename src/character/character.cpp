@@ -6,14 +6,14 @@ Character::Character()
 
 void Character::update(const float time, IntVectorVector& location)
 {
-   rect.left += dx * time;
+   physicalQ.rect.left += physicalQ.dx * time;
    CollisionX(location);
-   if(!onGround) dy = dy + 0.005*time ;
-   rect.top += dy * time;
+   if(!onGround) physicalQ.dy = physicalQ.dy + 0.005*time ;
+   physicalQ.rect.top += physicalQ.dy * time;
    onGround = false;
    CollisionY(location);
-   rectangle.setPosition(rect.left,rect.top);
-   dx = 0;
+   rectangle.setPosition(physicalQ.rect.left, physicalQ.rect.top);
+   physicalQ.dx = 0;
 }
 
 void Character::setDirection(int _direction)
@@ -23,12 +23,12 @@ void Character::setDirection(int _direction)
 
 void Character::setDx(float _dx)
 {
-   dx = _dx;
+   physicalQ.dx = _dx;
 }
 
 void Character::setDy(float _dy)
 {
-   dy = _dy;
+   physicalQ.dy = _dy;
 }
 
 void Character::setCharacterHeight(int _CharacterHeight)
@@ -58,7 +58,7 @@ hlth::Health Character::getHealth()
 
 sf::FloatRect Character::getRect()
 {
-   return rect;
+   return physicalQ.rect;
 }
 
 void Character::setHealth(hlth::Health _Health)
@@ -80,7 +80,7 @@ bool Character::isAlive()
 
 void Character::setRect(sf::FloatRect _rect)
 {
-   rect = _rect;
+   physicalQ.rect = _rect;
 }
 
 void Character::jump()
@@ -95,22 +95,22 @@ void Character::stateOnGround()
 
 void Character::setLeft(float left)
 {
-   rect.left = left;
+   physicalQ.rect.left = left;
 }
 
 void Character::setTop(float top)
 {
-   rect.top = top;
+   physicalQ.rect.top = top;
 }
 
 float Character::getDx()
 {
-   return dx;
+   return physicalQ.dx;
 }
 
 float Character::getDy()
 {
-   return dy;
+   return physicalQ.dy;
 }
 
 int Character::getDirection()
@@ -123,31 +123,31 @@ int Character::getDirection()
 
 void Character::CollisionX(IntVectorVector& location)
 {
-   for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
-      for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
+   for (int i = physicalQ.rect.top / 32; i < (physicalQ.rect.top + physicalQ.rect.height) / 32; i++)
+      for (int j = physicalQ.rect.left / 32; j < (physicalQ.rect.left + physicalQ.rect.width) / 32; j++)
          if (location[i][j]== 1)
-            if (dx > 0)
-               rect.left = j * 32 - rect.width;
-            else if (dx < 0)
-               rect.left = j * 32 + 32;
+            if (physicalQ.dx > 0)
+               physicalQ.rect.left = j * 32 - physicalQ.rect.width;
+            else if (physicalQ.dx < 0)
+               physicalQ.rect.left = j * 32 + 32;
 }
 
 
 void Character::CollisionY(IntVectorVector& location)
 {
-   for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
-      for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
+   for (int i = physicalQ.rect.top / 32; i < (physicalQ.rect.top + physicalQ.rect.height) / 32; i++)
+      for (int j = physicalQ.rect.left / 32; j < (physicalQ.rect.left + physicalQ.rect.width) / 32; j++)
          if (location[i][j] == 1)
-            if (dy > 0)
+            if (physicalQ.dy > 0)
             {
-               rect.top = i * 32 - rect.height;
-               dy = 0;
+               physicalQ.rect.top = i * 32 - physicalQ.rect.height;
+               physicalQ.dy = 0;
                onGround = true;
             }
-            else if (dy < 0)
+            else if (physicalQ.dy < 0)
             {
-               rect.top = i * 32 + 32;
-               dy = 0;
+               physicalQ.rect.top = i * 32 + 32;
+               physicalQ.dy = 0;
             }
 }
 

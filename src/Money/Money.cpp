@@ -10,7 +10,7 @@ Money::Money(int _cost, float _x, float _y)
    sprite.setTexture(texture);
    sprite.setTextureRect(sf::IntRect(0, 0, 15, 15));
    sprite.setPosition(_x, _y);
-
+   physicalQ.rect = sprite.getGlobalBounds();
 
 }
 

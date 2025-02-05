@@ -58,7 +58,9 @@ set(SOURCES_FILES src/main.cpp
 	src/Money/Money.cpp
 	src/Money/Money.h
 	src/Physics2D/Physics2D.cpp
-	src/Physics2D/Physics2D.h)
+	src/Physics2D/Physics2D.h
+	src/physicalQuantities/physicalQuantities.cpp
+	src/physicalQuantities/physicalQuantities.h)
 	
 project(${PROJECT_NAME})
 

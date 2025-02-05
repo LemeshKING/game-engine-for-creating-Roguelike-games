@@ -1,6 +1,7 @@
 #pragma once
-#include"../Health/health.h"
-#include"../AnimationManager/AnimationManager.h"
+#include "../Health/health.h"
+#include "../AnimationManager/AnimationManager.h"
+#include "../physicalQuantities/PhysicalQuantities.h"
 
 typedef std::vector<int> IntVector;
 typedef std::vector<IntVector> IntVectorVector;
@@ -10,7 +11,7 @@ class Character
  public:
    std::map<std::string, bool> key;
    ar::AnimationManager animation;
- 
+   PhysicalQuantities physicalQ;
 
 
    Character();
@@ -36,8 +37,7 @@ class Character
    float getDy();
    int getDirection();
  private:
-   virtual void CollisionX(IntVectorVector& location);
-   virtual void CollisionY(IntVectorVector& location);
+   
  protected: 
    enum State{ stay, walk, jumping, attack } CharacterState;
    hlth::Health health;
@@ -46,12 +46,11 @@ class Character
    int direction = 1;
    int characterHeight = 0;
    int characterWidth = 0;
-   sf::FloatRect rect;
    sf::Sprite sprite;
-   float dx = 0;
-   float dy = 0;
    bool onGround = false;
    sf::RectangleShape rectangle;
    void Kill();
    virtual void ChangeStateCharacter();
+   virtual void CollisionX(IntVectorVector& location);
+   virtual void CollisionY(IntVectorVector& location);
 };

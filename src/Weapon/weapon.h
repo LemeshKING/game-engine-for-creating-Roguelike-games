@@ -1,9 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-
+#include "../physicalQuantities/PhysicalQuantities.h"
 class weapon
 {
  public:
+   PhysicalQuantities physicalQ;
    void setRect(sf::FloatRect &_rect);
    void setRectangle(sf::RectangleShape &_rect);
    void setSrite(sf::Sprite _sprite);
@@ -14,6 +15,7 @@ class weapon
    void setDamageValue(unsigned int _damageValue);
    unsigned int getDamageValue();
    void setRotation(float angel);
+   void update();
  protected:
    sf::Texture texture;
    unsigned int damageValue;

@@ -232,7 +232,9 @@ void Game::Run(sf::RenderWindow &window)
 	int frames = 0;
 	bool onceAttack = true;
 	bool killEnemy = false;
-	SPtrGameObject coin = std::make_shared<Money>(50, 64, 64);
+	SPtrGameObject coin = std::make_shared<Thorns>();
+	coin->setX(64);
+	coin->setY(64);
 	while (window.isOpen())
 	{
 		if(pl.isAlive())
@@ -290,8 +292,8 @@ void Game::Run(sf::RenderWindow &window)
 			}
 
 			
-			gravity(coin, 5, location);
-			
+			gravity(coin->physicalQ, time,location);
+			coin->update();
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
 			drawBack(window);
@@ -303,7 +305,8 @@ void Game::Run(sf::RenderWindow &window)
 					{
 						if(pl.getRect().intersects(location->TileMap[i][j].Object->getSprite().getGlobalBounds()))
 							location->TileMap[i][j].Object->PlayerInteraction(pl);
-						gravity(location->TileMap[i][j].Object, time, location);
+						gravity(location->TileMap[i][j].Object->physicalQ, time, location);
+						location->TileMap[i][j].Object->update();
 						window.draw(location->TileMap[i][j].Object->getSprite());
 						if (location->TileMap[i][j].Object->getSprite().getColor() == sf::Color::Black)
 						{	
@@ -325,7 +328,8 @@ void Game::Run(sf::RenderWindow &window)
 								location->TileMap[i][j].Weapon = tmp;
 								raisingWeaponsFrames = 0;
 							}	
-					gravity(location->TileMap[i][j].Weapon, time, location);
+					gravity(location->TileMap[i][j].Weapon->physicalQ, time, location);
+					location->TileMap[i][j].Weapon->update();
 					window.draw(location->TileMap[i][j].Weapon->getSprite());
 					}
 					for(int enemy = 0; enemy < location->TileMap[i][j].enemysOnTile.size(); enemy++)
@@ -353,7 +357,7 @@ void Game::Run(sf::RenderWindow &window)
 					}
 				}
 			raisingWeaponsFrames++;
-			pl.update(5,location->TypeOfTiles);
+			pl.update(time,location->TypeOfTiles);
 			healthBar->setX(pl.getRect().left);
 			healthBar->setY(pl.getRect().top);
 			if(healthBar->getFullHealthBar().getSize().x > pl.getRect().left)

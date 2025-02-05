@@ -267,6 +267,7 @@ void Meadows::GenerateCaves()
 		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon = std::make_shared <sword>();
 		tmp1 = TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->getSprite();
 		tmp1.setPosition((rndMapPoints[k] + CavesWidth - 5) * 32, (Height - CavesHeight[CavesWidth - 5] - 2) * 32);
+		tmp1.setColor(sf::Color::Black);
 		//tmp1.setRotation(45);
 
 		TileMap[Height - CavesHeight[CavesWidth - 5] - 1][rndMapPoints[k] + CavesWidth - 5].Weapon->setDamageValue(55);

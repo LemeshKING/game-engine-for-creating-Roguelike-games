@@ -36,12 +36,13 @@ class Player : public Character, public ISubject
 
 protected:
    void ChangeStateCharacter() override;
+   void CollisionX(IntVectorVector& location) override;
+   void CollisionY(IntVectorVector& location) override;
 private:
    ListUptrObserver Observers;
    SPtrWeapon Weapon;
    bool immunity = false;
    unsigned int wallet = 0;
    Camera camera;
-   void CollisionX(IntVectorVector& location) override;
-   void CollisionY(IntVectorVector& location) override;
+   
 };

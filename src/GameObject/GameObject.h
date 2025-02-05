@@ -13,6 +13,8 @@ protected:
    int SizeX;
    int SizeY;
 public:
+   void update();
+   PhysicalQuantities physicalQ;
    virtual void PlayerInteraction(Player& _player) = 0;
    void setSprite(sf::Sprite _sprite);
    sf::Sprite getSprite();
@@ -20,4 +22,5 @@ public:
    void setY(int _y);
    int getX();
    int getY();
+   void setRect(sf::FloatRect rect);
 };
