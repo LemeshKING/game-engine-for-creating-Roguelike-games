@@ -4,6 +4,8 @@ void weapon::setRect(sf::FloatRect &_rect)
 {
    physicalQ.rect = _rect;
    sprite.setPosition(physicalQ.rect.left, physicalQ.rect.top);
+   positionX = physicalQ.rect.left / 32;
+   positionY = physicalQ.rect.top / 32;
 }
 
 void weapon::setRectangle(sf::RectangleShape& _rect)
@@ -37,6 +39,8 @@ void weapon::update(int x, int y)
    physicalQ.rect.top = y + 11.35;
    physicalQ.dy = 0;
    sprite.setPosition(physicalQ.rect.left, physicalQ.rect.top);
+   positionX = physicalQ.rect.left / 32;
+   positionY = physicalQ.rect.top / 32;
 }
 
 void weapon::setDamageValue(unsigned int _damageValue)
@@ -57,4 +61,6 @@ void weapon::setRotation(float angel)
 void weapon::update()
 {
    sprite.setPosition(physicalQ.rect.getPosition());
+   positionX = physicalQ.rect.left / 32;
+   positionY = physicalQ.rect.top / 32;
 }

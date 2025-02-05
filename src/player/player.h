@@ -33,7 +33,7 @@ class Player : public Character, public ISubject
    void Detach(SPtrObserver &observer) override;
    void Notify() override;
    void gainMoney(unsigned int &cost);
-
+   int raisingFrames = 0;
 protected:
    void ChangeStateCharacter() override;
    void CollisionX(IntVectorVector& location) override;

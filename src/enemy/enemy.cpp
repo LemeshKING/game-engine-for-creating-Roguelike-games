@@ -68,7 +68,7 @@ void Enemy::update(const float time, IntVectorVector& location)
       Attack();
    }
 
-   
+
    physicalQ.rect.left += physicalQ.dx * time;
    Vision.left += physicalQ.dx * time;
    CollisionX(location);

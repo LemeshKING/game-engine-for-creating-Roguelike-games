@@ -245,7 +245,7 @@ void Game::Run(sf::RenderWindow &window)
 				frames = 0;
 			}
 			float time = clock.getElapsedTime().asMicroseconds();
-			time /= 1300;
+			time = 5;
 			
 			clock.restart();
 ;
@@ -303,8 +303,8 @@ void Game::Run(sf::RenderWindow &window)
 					
 					if(location->TileMap[i][j].Object != nullptr)
 					{
-						if(pl.getRect().intersects(location->TileMap[i][j].Object->getSprite().getGlobalBounds()))
-							location->TileMap[i][j].Object->PlayerInteraction(pl);
+						/*if(pl.getRect().intersects(location->TileMap[i][j].Object->getSprite().getGlobalBounds()))
+							location->TileMap[i][j].Object->PlayerInteraction(pl);*/
 						gravity(location->TileMap[i][j].Object->physicalQ, time, location);
 						location->TileMap[i][j].Object->update();
 						window.draw(location->TileMap[i][j].Object->getSprite());
@@ -318,27 +318,25 @@ void Game::Run(sf::RenderWindow &window)
 						
 					if(location->TileMap[i][j].Weapon != nullptr)
 					{
-						if (pl.getRect().intersects(location->TileMap[i][j].Weapon->getRect()))
-							if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && raisingWeaponsFrames > 77)
-							{
-								SPtrWeapon tmp = pl.getWeapon();
-								//tmp->setRotation(45);
-								//location->TileMap[i][j].Weapon->setRotation(0);
-								pl.setWeapon(location->TileMap[i][j].Weapon);
-								location->TileMap[i][j].Weapon = tmp;
-								raisingWeaponsFrames = 0;
-							}	
-					gravity(location->TileMap[i][j].Weapon->physicalQ, time, location);
-					location->TileMap[i][j].Weapon->update();
-					window.draw(location->TileMap[i][j].Weapon->getSprite());
+						window.draw(location->TileMap[i][j].Weapon->getSprite());
+						gravity(location->TileMap[i][j].Weapon->physicalQ, time, location);
+						location->TileMap[i][j].Weapon->update();
+					
+						if (location->TileMap[i][j].Weapon->positionX != j || location->TileMap[i][j].Weapon->positionY != i)
+						{
+							location->TileMap[location->TileMap[i][j].Weapon->positionY][location->TileMap[i][j].Weapon->positionX].Weapon = location->TileMap[i][j].Weapon;
+							location->TileMap[i][j].Weapon.reset();
+						}
+					
 					}
 					for(int enemy = 0; enemy < location->TileMap[i][j].enemysOnTile.size(); enemy++)
 					{
 						if(!location->TileMap[i][j].enemysOnTile[enemy]->isAlive())
 						{
+							location->TileMap[i][j].Object = std::make_shared<Money>(location->TileMap[i][j].enemysOnTile[enemy]->getCost(), location->TileMap[i][j].enemysOnTile[enemy]->getRect().left, location->TileMap[i][j].enemysOnTile[enemy]->getRect().top);
 							location->TileMap[i][j].enemysOnTile[enemy].reset();
 							location->TileMap[i][j].enemysOnTile.erase(location->TileMap[i][j].enemysOnTile.begin() + enemy);
-							location->TileMap[i][j].Object = std::make_shared<Money>(location->TileMap[i][j].enemysOnTile[enemy]->getCost(), location->TileMap[i][j].enemysOnTile[enemy]->getRect().left, location->TileMap[i][j].enemysOnTile[enemy]->getRect().top);
+							
 						}
 						else
 						{
@@ -356,8 +354,9 @@ void Game::Run(sf::RenderWindow &window)
 						}	
 					}
 				}
-			raisingWeaponsFrames++;
+			findingIntersections(pl, location);
 			pl.update(time,location->TypeOfTiles);
+			
 			healthBar->setX(pl.getRect().left);
 			healthBar->setY(pl.getRect().top);
 			if(healthBar->getFullHealthBar().getSize().x > pl.getRect().left)

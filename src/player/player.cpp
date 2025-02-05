@@ -67,7 +67,7 @@ void Player::update(const float time, IntVectorVector& location)
    else 
       physicalQ.rect.height = characterHeight;
 
-   
+   raisingFrames++;
    physicalQ.dx *= direction;
    physicalQ.rect.left += physicalQ.dx * time;
    CollisionX(location);

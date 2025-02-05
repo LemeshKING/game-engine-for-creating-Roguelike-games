@@ -16,6 +16,8 @@ class weapon
    unsigned int getDamageValue();
    void setRotation(float angel);
    void update();
+   int positionX = 0;
+   int positionY = 0;
  protected:
    sf::Texture texture;
    unsigned int damageValue;
