@@ -17,7 +17,7 @@ private:
 public:
    sf::Sprite sprite;
    std::vector<std::shared_ptr<Enemy>> enemysOnTile;
-   SPtrGameObject Object;
+   std::vector<SPtrGameObject> objectsOnTile;
    SPtrWeapon Weapon;
    sf::Sprite getSprite();
    void setSprite(sf::Sprite _sprite);

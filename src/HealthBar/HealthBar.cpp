@@ -46,6 +46,10 @@ void HealthBar::HealthChange(const unsigned int& _currentHp)
    helathPoints.setString(std::to_string(_currentHp));
 }
 
+void HealthBar::MoneyChange(const unsigned int& _currentMoney)
+{
+}
+
 sf::RectangleShape HealthBar::getFullHealthBar()
 {
    return fullBar;

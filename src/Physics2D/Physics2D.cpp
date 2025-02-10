@@ -27,9 +27,9 @@ void findingIntersections(Player &pl, const std::unique_ptr<mp::Map>& location)
    for (int i = (pl.physicalQ.rect.top - pl.physicalQ.rect.height)/ 32; i < (pl.physicalQ.rect.top + pl.physicalQ.rect.height) / 32; i++)
       for (int j = (pl.physicalQ.rect.left - pl.physicalQ.rect.width) / 32; j < (pl.physicalQ.rect.left + pl.physicalQ.rect.width) / 32; j++)
       {
-         if(location->TileMap[i][j].Object != nullptr)
-            if(pl.physicalQ.rect.intersects(location->TileMap[i][j].Object->physicalQ.rect))
-               location->TileMap[i][j].Object->PlayerInteraction(pl);
+         for(int objectIndex = 0; objectIndex < location->TileMap[i][j].objectsOnTile.size(); objectIndex++)
+            if(pl.physicalQ.rect.intersects(location->TileMap[i][j].objectsOnTile[objectIndex]->physicalQ.rect))
+               location->TileMap[i][j].objectsOnTile[objectIndex]->PlayerInteraction(pl); 
          if (location->TileMap[i][j].Weapon != nullptr)
             if (pl.physicalQ.rect.intersects(location->TileMap[i][j].Weapon->getRect()))
                if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && pl.raisingFrames > 77)

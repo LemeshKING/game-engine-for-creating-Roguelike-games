@@ -168,12 +168,16 @@ void Player::Detach(SPtrObserver &observer)
 void Player::Notify()
 {
    for(auto &i: Observers)
+   {
       i->HealthChange(health.getHealthPoints());
+      i->MoneyChange(wallet);
+   }
 }
 
 void Player::gainMoney(unsigned int& cost)
 {
    wallet += cost;
+   Notify();
 }
 
 

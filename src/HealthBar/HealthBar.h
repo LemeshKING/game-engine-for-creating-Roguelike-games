@@ -18,6 +18,7 @@ private:
    void setX(int _x);
    void setY(int _y);
    void HealthChange(const unsigned int& _currentHp) override;
+   void MoneyChange(const unsigned int & _currentMoney) override;
    sf::RectangleShape getFullHealthBar();
    sf::RectangleShape getCurrentHealthBar();
    sf::Text getText();

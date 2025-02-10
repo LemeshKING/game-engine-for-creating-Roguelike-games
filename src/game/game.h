@@ -5,7 +5,9 @@
 #include "../sword/sword.h"
 #include "../HealthBar/HealthBar.h"
 #include "../Money/Money.h"
+#include "../MoneyUI/MoneyUI.h"
 #include "../Physics2D/Physics2D.h"
+#include "../MiniMap/MiniMap.h"
 #include <iostream>
 #include <thread>
 
@@ -21,10 +23,12 @@ private:
    int mouseX = w / 2 + 64;
    int mouseY = h / 2;
    std::shared_ptr<HealthBar> healthBar;
+   std::shared_ptr<MoneyUI> moneyUI;
    UPtrMap location;
    SPtrEnemyVector Enemys;
    UPtrMoneyVector Coins;
    Player pl;
+   MiniMap miniMap;
 public:
    Game();
    void TestingProceduralGeneration(sf::RenderWindow& window);
@@ -35,7 +39,6 @@ public:
    void Menu();
    void Initialization();
    void drawBack(sf::RenderWindow& window);
-
 };
 
 

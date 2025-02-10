@@ -16,8 +16,9 @@ Money::Money(int _cost, float _x, float _y)
 
 void Money::PlayerInteraction(Player& _player)
 {
-   if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+   if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && _player.raisingFrames > 1)
    {
+      _player.raisingFrames = 0;
       _player.gainMoney(cost);
       sprite.setColor(sf::Color::Black);
    }

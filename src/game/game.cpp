@@ -223,7 +223,7 @@ void Game::Run(sf::RenderWindow &window)
 	srand(time(NULL));
 	int seed = 1 + std::rand() % 1000;
 	bool isMouseButtonPresed = false;
-
+	
 	window.setFramerateLimit(144);
 	int raisingWeaponsFrames = 0;
 
@@ -256,14 +256,10 @@ void Game::Run(sf::RenderWindow &window)
 					window.close();
 				if(event.type == sf::Event::MouseButtonPressed)
 					if (event.key.code == sf::Mouse::Left)
-					{
-						isMouseButtonPresed = true;
 						pl.key["Attack"] = true;
-					}
+					
 					
 			}
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
-				killEnemy = !killEnemy;
 
 			pl.satDown = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
 			if(pl.canMove)
@@ -292,26 +288,26 @@ void Game::Run(sf::RenderWindow &window)
 			}
 
 			
-			gravity(coin->physicalQ, time,location);
-			coin->update();
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
+			
 			drawBack(window);
+			window.draw(miniMap.getSprite());
+
 			for (int i = pl.getCamera().getCenterY() / 32 - 9; i < pl.getCamera().getCenterY() / 32 + 10; i++)
 				for (int j = pl.getCamera().getCenterX() / 32 - 15; j < pl.getCamera().getCenterX() / 32 + 17; j++)
 				{
 					
-					if(location->TileMap[i][j].Object != nullptr)
+					for(int objectIndex = 0; objectIndex < location->TileMap[i][j].objectsOnTile.size(); objectIndex++)
 					{
-						/*if(pl.getRect().intersects(location->TileMap[i][j].Object->getSprite().getGlobalBounds()))
-							location->TileMap[i][j].Object->PlayerInteraction(pl);*/
-						gravity(location->TileMap[i][j].Object->physicalQ, time, location);
-						location->TileMap[i][j].Object->update();
-						window.draw(location->TileMap[i][j].Object->getSprite());
-						if (location->TileMap[i][j].Object->getSprite().getColor() == sf::Color::Black)
+						
+						gravity(location->TileMap[i][j].objectsOnTile[objectIndex]->physicalQ, time, location);
+						location->TileMap[i][j].objectsOnTile[objectIndex]->update();
+						window.draw(location->TileMap[i][j].objectsOnTile[objectIndex]->getSprite());
+						if (location->TileMap[i][j].objectsOnTile[objectIndex]->getSprite().getColor() == sf::Color::Black)
 						{	
-							location->TileMap[i][j].Object.reset();
-							location->TileMap[i][j].Object = nullptr;
+							location->TileMap[i][j].objectsOnTile[objectIndex].reset();
+							location->TileMap[i][j].objectsOnTile.erase(location->TileMap[i][j].objectsOnTile.begin() + objectIndex);
 						}
 					}
 					
@@ -333,7 +329,7 @@ void Game::Run(sf::RenderWindow &window)
 					{
 						if(!location->TileMap[i][j].enemysOnTile[enemy]->isAlive())
 						{
-							location->TileMap[i][j].Object = std::make_shared<Money>(location->TileMap[i][j].enemysOnTile[enemy]->getCost(), location->TileMap[i][j].enemysOnTile[enemy]->getRect().left, location->TileMap[i][j].enemysOnTile[enemy]->getRect().top);
+							location->TileMap[i][j].objectsOnTile.push_back(std::make_shared<Money>(location->TileMap[i][j].enemysOnTile[enemy]->getCost(), location->TileMap[i][j].enemysOnTile[enemy]->getRect().left, location->TileMap[i][j].enemysOnTile[enemy]->getRect().top));
 							location->TileMap[i][j].enemysOnTile[enemy].reset();
 							location->TileMap[i][j].enemysOnTile.erase(location->TileMap[i][j].enemysOnTile.begin() + enemy);
 							
@@ -356,68 +352,39 @@ void Game::Run(sf::RenderWindow &window)
 				}
 			findingIntersections(pl, location);
 			pl.update(time,location->TypeOfTiles);
+			moneyUI->setX(pl.getRect().left);
+			moneyUI->setY(pl.getRect().top);
 			
 			healthBar->setX(pl.getRect().left);
 			healthBar->setY(pl.getRect().top);
+			
+			miniMap.setPosition(pl.getRect().left, pl.getRect().top);
 			if(healthBar->getFullHealthBar().getSize().x > pl.getRect().left)
+			{
 				healthBar->setX(healthBar->getFullHealthBar().getSize().x);
+				moneyUI->setX(480);
+				miniMap.setPosition(480, pl.getRect().top);
+			}
 			else if(pl.getRect().left > (location->getWidth() - 17) * 32)
+			{
 				healthBar->setX((location->getWidth() - 17) * 32);
+				moneyUI->setX((location->getWidth() - 17) * 32);
+				miniMap.setPosition((location->getWidth() - 17) * 32, pl.getRect().top);
+			}
+			moneyUI->update();
 			healthBar->update();
 			if(pl.animation.getAnimation().getFrame() >= 2 && pl.key["Attack"])
-			{
 				window.draw(pl.getWeapon()->getSprite());
-				AttackFrames++;
-			}
-			
-			//for (int i = 0; i < Enemys.size(); i++)
-			//{
-			//	if(Enemys[i]->isAlive())
-			//	{
-			//		if(Enemys[i]->getRect().left > pl.getCamera().getCenterX() - 512 && Enemys[i]->getRect().left < pl.getCamera().getCenterX() + 576)
-			//		{
-			//			Enemys[i]->setPlayerPosition(pl.getRect());
-			//				if(pl.getRect().intersects(Enemys[i]->getRect()))
-			//					pl.TakeDamage(Enemys[i]->getDamageValue());
-			//			if (Enemys[i]->projectTile.isAlive())
-			//			{
-			//				Enemys[i]->projectTile.update(time);
-			//				window.draw(Enemys[i]->projectTile.getSprite());
-			//				if(pl.getRect().intersects(Enemys[i]->projectTile.getRect()))
-			//						pl.TakeDamage(Enemys[i]->projectTile.damageValue);
-			//			}
-			//			if (pl.animation.getAnimation().getFrame() >= 2 && pl.key["Attack"] && !Enemys[i]->wasAttaking)
-			//				if(pl.getWeapon()->getRect().intersects(Enemys[i]->getRect()))
-			//				{
-			//					Enemys[i]->TakeDamage(pl.getWeapon()->getDamageValue());
-			//					Enemys[i]->wasAttaking = true;
-			//				}
-			//			Enemys[i]->update(time,location->TypeOfTiles);
-			//			window.draw(Enemys[i]->animation.getAnimation().getSprite());
 
-			//		}
-			//	}
-			//	else
-			//	{
-			//		//UPtrMoney tmp = std::make_unique<Money>(Enemys[i]->getCost(),Enemys[i]->getRect().getPosition().x, Enemys[i]->getRect().getPosition().y);
-			//		//Coins.emplace_back(tmp);
-			//		location->TileMap[Enemys[i]->getRect().top / 32][Enemys[i]->getRect().left / 32].Object = std::make_shared<Money>(Enemys[i]->getCost(), Enemys[i]->getRect().left, Enemys[i]->getRect().top);
-			//		Enemys[i].reset();
-			//		Enemys.erase(Enemys.begin() + i);
-			//	}
-			//}
+			
 		
 			if (pl.animation.getAnimation().getFrame() == 4 && pl.key["Attack"] == true)
 			{
-				AttackFrames = 0;
-				onceAttack = true;
-				isMouseButtonPresed = false;
 				pl.key["Attack"] = false;
 				pl.animation.setFrame(0);
-				for(int i = 0; i < Enemys.size(); i++)
-					Enemys[i]->wasAttaking = false;
 			}
-
+			window.draw(moneyUI->getSprite());
+			window.draw(moneyUI->getText());
 			window.draw(coin->getSprite());
 			window.draw(healthBar->getFullHealthBar());
 			window.draw(healthBar->getCurrentHealthBar());
@@ -486,18 +453,26 @@ void Game::Initialization()
 			camera.setCenterY(h / 4 + 32);
 			pl.setCamera(camera);
 	});
-
+	SPtrObserver moneyUIObserver = std::make_shared<MoneyUI>();
+	moneyUI = std::static_pointer_cast<MoneyUI>(moneyUIObserver);
+	pl.Attach(moneyUIObserver);
 	SPtrWeapon Sword = std::make_shared<sword>();
 	locationThread.join();
 	playerThread.join();
+	int tmpx = 300, tmpy = (location->getStartPlayerPosition() + 3) * 32;
+	moneyUI->Initialization(tmpx, tmpy);
+	sf::RenderTexture tmp;
+	miniMap.drawMiniMapTexture(tmp, location->TypeOfTiles);
+
 	pl.Initialization(64, location->getStartPlayerPosition() * 32);
+
 	Sword->setRect(sf::FloatRect(pl.getRect().left + pl.getRect().width, pl.getRect().top, 35, 10));
 	Sword->setDamageValue(34);
 	pl.setWeapon(Sword);
 	healthBar->Initialization(pl.getHealth().getMaxHealthPoints(), 0, location->getStartPlayerPosition() + 7);
 	
 	sf::RenderWindow window(sf::VideoMode(w, h), "My first Game", sf::Style::Fullscreen);
-	
+
 	/*Enemys = location->getEnemys();
 	if(Enemys.size() > location->currentEnemy)
 		Enemys.resize(location->currentEnemy);*/
@@ -517,5 +492,6 @@ void Game::drawBack(sf::RenderWindow& window)
 		for (int j = pl.getCamera().getCenterX() / 32 - 15; j < pl.getCamera().getCenterX() / 32 + 17; j++)
 			window.draw(location->TileMap[i][j].getSprite());
 }
+
 
 

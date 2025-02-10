@@ -60,7 +60,11 @@ set(SOURCES_FILES src/main.cpp
 	src/Physics2D/Physics2D.cpp
 	src/Physics2D/Physics2D.h
 	src/physicalQuantities/physicalQuantities.cpp
-	src/physicalQuantities/physicalQuantities.h)
+	src/physicalQuantities/physicalQuantities.h
+	src/MoneyUI/MoneyUI.cpp
+	src/MoneyUI/MoneyUI.h
+	src/MiniMap/MiniMap.cpp
+	src/MiniMap/MiniMap.h)
 	
 project(${PROJECT_NAME})
 
